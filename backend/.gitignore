@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+*.db
+uploads/*.jpg
+uploads/*.jpeg
+uploads/*.png
+uploads/*.webp
+uploads/*.heic
+uploads/*.heif
+.venv/
+venv/
+*.egg-info/
+dist/
+build/

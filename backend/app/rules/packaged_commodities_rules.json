@@ -1,0 +1,113 @@
+﻿{
+  "$schema": "./rules-schema.json",
+  "version": "1.0.0",
+  "rule_set": "Legal Metrology (Packaged Commodities) Rules, 2011",
+  "jurisdiction": "India",
+  "governing_statute": "Legal Metrology Act, 2009 (1 of 2010)",
+  "rules": [
+    {
+      "rule_id": "DECLARATION_NAME_001",
+      "field": "product_name",
+      "display_name": "Generic / Common Name of Commodity",
+      "legal_reference": "Rule 6(1)(a), Legal Metrology (Packaged Commodities) Rules, 2011",
+      "required": true,
+      "severity": "high",
+      "validation_type": "presence_and_confidence",
+      "description": "Every package shall bear the name and description of the commodity contained therein on the principal display panel.",
+      "confidence_thresholds": {
+        "verified_min": 0.80,
+        "review_min": 0.50
+      },
+      "recommendation_on_verified": "No immediate manual action required based on automated detection.",
+      "recommendation_on_review": "Verify that the product name is clearly visible and legible on the principal display panel.",
+      "recommendation_on_issue": "Inspect the package display panel manually for the generic or common name of the commodity."
+    },
+    {
+      "rule_id": "DECLARATION_NET_QTY_001",
+      "field": "net_quantity",
+      "display_name": "Net Quantity Declaration",
+      "legal_reference": "Rule 6(1)(b) & Second Schedule, Legal Metrology (Packaged Commodities) Rules, 2011",
+      "required": true,
+      "severity": "high",
+      "validation_type": "net_quantity_format",
+      "allowed_units": ["g", "kg", "ml", "L", "units"],
+      "description": "Net quantity shall be declared in terms of standard units of weight, measure, or count in metric terms.",
+      "confidence_thresholds": {
+        "verified_min": 0.80,
+        "review_min": 0.50
+      },
+      "recommendation_on_verified": "Net quantity declaration conforms to standard metric packaging format.",
+      "recommendation_on_review": "Verify that the declared net quantity and metric unit conform to standard measurement units.",
+      "recommendation_on_issue": "Check the label for a declaration of net quantity in terms of standard metric weight or volume."
+    },
+    {
+      "rule_id": "DECLARATION_MRP_001",
+      "field": "mrp",
+      "display_name": "Maximum Retail Price (MRP)",
+      "legal_reference": "Rule 6(1)(d) & Rule 18(1), Legal Metrology (Packaged Commodities) Rules, 2011",
+      "required": true,
+      "severity": "high",
+      "validation_type": "mrp_format",
+      "require_tax_inclusive": true,
+      "description": "Retail sale price of the package shall clearly indicate Maximum Retail Price (inclusive of all taxes).",
+      "confidence_thresholds": {
+        "verified_min": 0.80,
+        "review_min": 0.50
+      },
+      "recommendation_on_verified": "MRP declaration detected with positive price value.",
+      "recommendation_on_review": "Verify whether the detected price value includes the mandatory 'inclusive of all taxes' declaration.",
+      "recommendation_on_issue": "Search the label for a clearly printed Maximum Retail Price inclusive of all taxes."
+    },
+    {
+      "rule_id": "DECLARATION_MFG_001",
+      "field": "manufacturer_packer",
+      "display_name": "Manufacturer / Packer / Importer Details",
+      "legal_reference": "Rule 6(1)(e), Legal Metrology (Packaged Commodities) Rules, 2011",
+      "required": true,
+      "severity": "high",
+      "validation_type": "manufacturer_format",
+      "description": "Name and complete address of the manufacturer, packer, or importer shall be mentioned.",
+      "confidence_thresholds": {
+        "verified_min": 0.75,
+        "review_min": 0.50
+      },
+      "recommendation_on_verified": "Manufacturer or packer details detected with address context.",
+      "recommendation_on_review": "Verify that the manufacturer/packer address contains sufficient location details, city, or postal PIN code.",
+      "recommendation_on_issue": "Locate the manufacturer, packer, or importer name and address declaration on the label."
+    },
+    {
+      "rule_id": "DECLARATION_DATES_001",
+      "field": "date_information",
+      "display_name": "Month & Year of Manufacture or Packing",
+      "legal_reference": "Rule 6(1)(c), Legal Metrology (Packaged Commodities) Rules, 2011",
+      "required": true,
+      "severity": "medium",
+      "validation_type": "dates_format",
+      "description": "The month and year in which the commodity is manufactured, packed, or imported shall be clearly mentioned.",
+      "confidence_thresholds": {
+        "verified_min": 0.75,
+        "review_min": 0.50
+      },
+      "recommendation_on_verified": "Manufacturing, packing, or best before date information detected.",
+      "recommendation_on_review": "Inspect date stamp or ink-jet printing on the package for manufacturing/packing month and year.",
+      "recommendation_on_issue": "Locate the date stamping on the crimp, seal, or label panel to verify manufacturing or packaging dates."
+    },
+    {
+      "rule_id": "DECLARATION_CONSUMER_CARE_001",
+      "field": "consumer_care",
+      "display_name": "Consumer Care & Grievance Contact",
+      "legal_reference": "Rule 6(1)(f), Legal Metrology (Packaged Commodities) Rules, 2011",
+      "required": true,
+      "severity": "medium",
+      "validation_type": "consumer_care_format",
+      "description": "Name, address, telephone number, and email address of the person or office who can be contacted in case of consumer complaints.",
+      "confidence_thresholds": {
+        "verified_min": 0.75,
+        "review_min": 0.50
+      },
+      "recommendation_on_verified": "Consumer care contact details (helpline or email) detected.",
+      "recommendation_on_review": "Ensure at least a valid helpline number, email, or physical consumer redressal address is readable.",
+      "recommendation_on_issue": "Review the package for a consumer care cell contact number, email address, or grievance redressal info."
+    }
+  ]
+}
