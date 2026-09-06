@@ -12,16 +12,16 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<Variant, string> = {
-  primary: 'bg-accent text-white hover:bg-accent-hover active:bg-accent-hover disabled:opacity-50',
-  secondary: 'bg-white text-primary border border-border hover:bg-surface active:bg-surface disabled:opacity-50',
-  ghost: 'bg-transparent text-text-secondary hover:text-text-primary hover:bg-surface disabled:opacity-50',
-  danger: 'bg-error text-white hover:opacity-90 disabled:opacity-50',
+  primary: 'bg-[#163A5F] text-white hover:bg-[#1f4f82] active:bg-[#122e4c] shadow-xs disabled:opacity-50',
+  secondary: 'bg-white text-[#172033] border border-[#E2E8F0] hover:bg-[#F5F7FA] hover:border-slate-300 active:bg-slate-100 shadow-2xs disabled:opacity-50',
+  ghost: 'bg-transparent text-[#667085] hover:text-[#172033] hover:bg-slate-100/70 disabled:opacity-50',
+  danger: 'bg-[#DC2626] text-white hover:bg-[#b91c1c] active:bg-[#991b1b] shadow-xs disabled:opacity-50',
 };
 
 const sizeClasses: Record<Size, string> = {
-  sm: 'h-8 px-3 text-sm',
-  md: 'h-10 px-4 text-sm',
-  lg: 'h-12 px-6 text-base',
+  sm: 'h-8 px-3 text-xs font-medium',
+  md: 'h-9.5 px-4 text-sm font-semibold',
+  lg: 'h-11 px-5 text-sm font-semibold',
 };
 
 export function Button({

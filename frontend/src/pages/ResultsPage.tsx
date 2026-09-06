@@ -14,6 +14,8 @@ import {
   SparklesIcon,
   PhotoIcon,
   ExclamationTriangleIcon,
+  PencilSquareIcon,
+  CheckCircleIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '../components/ui/Button';
 import {
@@ -22,6 +24,7 @@ import {
   downloadReport,
   getScanReadability,
   getScanDetail,
+  submitInspectorReview,
 } from '../api/client';
 import { EvidenceImageViewer } from '../components/evidence/EvidenceImageViewer';
 import { CopilotWidget } from '../components/copilot/CopilotWidget';
@@ -152,64 +155,113 @@ function DeclarationRow({
         </div>
       </div>
 
-      {/* Expanded Accordion Details */}
+      {/* Expanded Accordion Details: Traceability Chain */}
       {isExpanded && (
-        <div className="px-4 pb-4 pt-2 border-t border-slate-100 text-xs space-y-3 bg-slate-50/50 rounded-b-xl">
-          {/* Assessment Rationale */}
-          <div>
-            <span className="font-semibold text-text-primary block mb-0.5">
-              Assessment Rationale:
-            </span>
-            <p className="text-text-secondary leading-relaxed">
-              {rule.explanation}
-            </p>
+        <div className="px-4 pb-4 pt-3 border-t border-slate-100 text-xs space-y-3 bg-slate-50/60 rounded-b-xl">
+          {/* Step 1: Declaration & Value */}
+          <div className="flex items-start justify-between gap-3 p-2.5 rounded-lg bg-white border border-[#E2E8F0]">
+            <div>
+              <span className="text-[10px] uppercase font-bold text-[#667085] tracking-wider block">
+                1. Declaration Target
+              </span>
+              <span className="font-semibold text-text-primary text-xs mt-0.5 block">
+                {rule.display_name}
+              </span>
+            </div>
+            <div className="text-right">
+              <span className="text-[10px] uppercase font-bold text-[#667085] tracking-wider block">
+                Extracted Value
+              </span>
+              <span className="font-mono text-xs font-bold text-[#163A5F] mt-0.5 block">
+                {isDetected ? rule.extracted_value : 'Not Detected'}
+              </span>
+            </div>
           </div>
 
-          {/* Supporting OCR Evidence */}
-          {rule.evidence && (
-            <div className="p-2.5 rounded-lg bg-white border border-slate-200">
-              <span className="font-medium text-slate-600 block mb-1">
-                Supporting OCR Evidence:
+          {/* Step 2: Grounded OCR Evidence */}
+          <div className="p-2.5 rounded-lg bg-white border border-[#E2E8F0]">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[10px] uppercase font-bold text-[#667085] tracking-wider">
+                2. Supporting OCR Evidence
               </span>
-              <p className="font-mono text-xs text-slate-900 break-words leading-relaxed">
+              <span className="text-[11px] font-semibold text-[#667085]">
+                Confidence: <strong className="text-[#172033]">{rule.confidence || 'Automated'}</strong>
+              </span>
+            </div>
+            {rule.evidence ? (
+              <p className="font-mono text-xs text-slate-900 bg-slate-50 p-2 rounded border border-slate-200 break-words leading-relaxed">
                 "{rule.evidence}"
               </p>
-            </div>
-          )}
+            ) : (
+              <p className="text-xs text-slate-400 italic">
+                No matching OCR text segment identified on this package panel.
+              </p>
+            )}
 
-          {/* Visual evidence status */}
-          <div className="flex items-center justify-between gap-2 pt-1">
-            <div className="text-[11px] text-text-secondary flex items-center gap-1.5">
-              {hasVisualEvidence ? (
-                <>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  <span>Mapped to OCR coordinates on package</span>
-                </>
-              ) : isDetected ? (
-                <>
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                  <span>Detected in text, bounding box coordinates not mapped</span>
-                </>
-              ) : (
-                <>
-                  <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-                  <span>No visual evidence detected on this image</span>
-                </>
+            {/* Visual Bounding Box Evidence link */}
+            <div className="flex items-center justify-between gap-2 pt-2 mt-1 border-t border-slate-100">
+              <div className="text-[11px] text-text-secondary flex items-center gap-1.5">
+                {hasVisualEvidence ? (
+                  <>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <span>Mapped to physical pixel bounding box</span>
+                  </>
+                ) : isDetected ? (
+                  <>
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                    <span>Found in text line, bounding box unmapped</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+                    <span>No visual evidence present on this image panel</span>
+                  </>
+                )}
+              </div>
+
+              {hasVisualEvidence && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSelect();
+                  }}
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-accent hover:underline cursor-pointer"
+                >
+                  <EyeIcon className="w-3.5 h-3.5" />
+                  <span>Highlight on Image</span>
+                </button>
               )}
             </div>
+          </div>
 
-            {hasVisualEvidence && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onSelect();
-                }}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-accent hover:underline"
-              >
-                <EyeIcon className="w-3.5 h-3.5" />
-                <span>Highlight on Image</span>
-              </button>
+          {/* Step 3: Statutory Rule Requirement */}
+          <div className="p-2.5 rounded-lg bg-white border border-[#E2E8F0]">
+            <span className="text-[10px] uppercase font-bold text-[#667085] tracking-wider block mb-1">
+              3. Statutory Rule / Legal Citation
+            </span>
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-xs text-[#163A5F] bg-blue-50 px-2 py-0.5 rounded border border-blue-100">
+                {rule.legal_reference || 'Legal Metrology (Packaged Commodities) Rules, 2011'}
+              </span>
+            </div>
+          </div>
+
+          {/* Step 4 & 5: Assessment Verdict & Explanation */}
+          <div className="p-2.5 rounded-lg bg-white border border-[#E2E8F0]">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-[10px] uppercase font-bold text-[#667085] tracking-wider">
+                4. Automated Assessment & Rationale
+              </span>
+              <StatusBadge status={rule.status} />
+            </div>
+            <p className="text-xs text-text-secondary leading-relaxed mt-1">
+              {rule.explanation}
+            </p>
+            {rule.recommendation && (
+              <p className="text-[11px] text-[#D97706] bg-amber-50/60 p-1.5 rounded border border-amber-200/60 mt-2 font-medium">
+                Recommendation: {rule.recommendation}
+              </p>
             )}
           </div>
         </div>
@@ -222,6 +274,8 @@ export default function ResultsPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const params = useParams<{ scanId: string }>();
+  const searchParams = new URLSearchParams(location.search);
+  const queryScanId = searchParams.get('scan_id') || searchParams.get('id');
 
   const state = location.state as {
     analysis?: AnalysisResponse;
@@ -231,8 +285,10 @@ export default function ResultsPage() {
   } | null;
 
   const [scanId, setScanId] = useState<string | null>(
-    params.scanId || state?.scanId || state?.analysis?.scan_id || null
+    params.scanId || queryScanId || state?.scanId || state?.analysis?.scan_id || null
   );
+  const isDemo = searchParams.get('demo') === 'true';
+
   const [analysisData, setAnalysisData] = useState<AnalysisResponse | null>(
     state?.analysis || null
   );
@@ -248,6 +304,17 @@ export default function ResultsPage() {
   const [copied, setCopied] = useState(false);
   const [isDownloadingReport, setIsDownloadingReport] = useState(false);
   const [reportError, setReportError] = useState<string | null>(null);
+
+  // Inspector Review State
+  const [inspectorDecision, setInspectorDecision] = useState<'confirmed' | 'manual_review' | 'better_image_requested'>('confirmed');
+  const [inspectorNotes, setInspectorNotes] = useState<string>('');
+  const [isSubmittingReview, setIsSubmittingReview] = useState<boolean>(false);
+  const [reviewSavedMessage, setReviewSavedMessage] = useState<string | null>(null);
+  const [savedReview, setSavedReview] = useState<{
+    decision: 'confirmed' | 'manual_review' | 'better_image_requested';
+    notes?: string | null;
+    reviewedAt: string;
+  } | null>(null);
 
   // Update scanId if route param changes
   useEffect(() => {
@@ -311,24 +378,58 @@ export default function ResultsPage() {
             if (isMounted) setAnalysisData(currentAnalysis);
 
             if (detail.compliance_results && detail.compliance_summary) {
+              const isPartial = detail.is_partial_panel === true;
               currentValidation = {
                 success: true,
                 scan_id: detail.id,
                 overall_assessment: (detail.overall_assessment as any) || 'COMPLIANT_WITH_OBSERVATIONS',
-                overall_label: 'COMPLIANCE SCREENING COMPLETED',
-                overall_description: 'Declarations reviewed against Legal Metrology (Packaged Commodities) Rules, 2011.',
+                overall_label: isPartial ? 'Partial Panel Evidence' : 'COMPLIANCE SCREENING COMPLETED',
+                overall_description: isPartial
+                  ? 'This appears to be a packaged commodity front or partial panel. Some mandatory declarations could not be verified from this image and may be located on another side of the package.'
+                  : 'Declarations reviewed against Legal Metrology (Packaged Commodities) Rules, 2011.',
                 disclaimer: 'Inspection aid only.',
                 summary: detail.compliance_summary,
                 results: detail.compliance_results,
                 is_eligible: detail.is_eligible ?? true,
+                is_partial_panel: isPartial,
+                package_eligibility: detail.package_eligibility || undefined,
+                compliance_evidence: detail.compliance_evidence || undefined,
                 eligibility_status: detail.overall_assessment || 'ELIGIBLE',
                 validated_at: detail.validated_at || detail.created_at,
                 message: 'Loaded from scan history',
               };
               if (isMounted) setValidationData(currentValidation);
             }
+
+            if (detail.inspector_decision) {
+              if (isMounted) {
+                setInspectorDecision(detail.inspector_decision);
+                if (detail.inspector_notes) setInspectorNotes(detail.inspector_notes);
+                setSavedReview({
+                  decision: detail.inspector_decision,
+                  notes: detail.inspector_notes,
+                  reviewedAt: detail.inspector_reviewed_at || detail.created_at || new Date().toISOString(),
+                });
+              }
+            }
           } catch (e) {
             console.error('Failed to load scan detail:', e);
+          }
+        } else {
+          // If analysisData was already provided in router state, still fetch detail to get saved review status if any
+          try {
+            const detail = await getScanDetail(scanId);
+            if (detail.inspector_decision && isMounted) {
+              setInspectorDecision(detail.inspector_decision);
+              if (detail.inspector_notes) setInspectorNotes(detail.inspector_notes);
+              setSavedReview({
+                decision: detail.inspector_decision,
+                notes: detail.inspector_notes,
+                reviewedAt: detail.inspector_reviewed_at || detail.created_at || new Date().toISOString(),
+              });
+            }
+          } catch (e) {
+            // Ignore optional fetch error
           }
         }
 
@@ -362,6 +463,30 @@ export default function ResultsPage() {
       isMounted = false;
     };
   }, [scanId]);
+
+  const handleSaveReview = async () => {
+    if (!scanId) return;
+    setIsSubmittingReview(true);
+    setReviewSavedMessage(null);
+    try {
+      const res = await submitInspectorReview(scanId, {
+        decision: inspectorDecision,
+        notes: inspectorNotes.trim() ? inspectorNotes.trim() : undefined,
+      });
+      setSavedReview({
+        decision: res.inspector_decision as 'confirmed' | 'manual_review' | 'better_image_requested',
+        notes: res.inspector_notes,
+        reviewedAt: res.inspector_reviewed_at,
+      });
+      setReviewSavedMessage('Inspector review decision recorded successfully and linked to inspection record.');
+      setTimeout(() => setReviewSavedMessage(null), 4000);
+    } catch (err) {
+      console.error('Failed to submit inspector review:', err);
+      setReviewSavedMessage('Failed to save review decision. Please retry.');
+    } finally {
+      setIsSubmittingReview(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -600,6 +725,12 @@ export default function ResultsPage() {
 
   const imageQuality = readabilityData?.image_quality;
 
+  const isPartialPanel =
+    validationData?.is_partial_panel === true ||
+    validationData?.overall_label === 'Partial Panel Evidence' ||
+    validationData?.compliance_evidence === 'PARTIAL_PANEL_EVIDENCE' ||
+    analysisData?.label_detection?.is_partial_panel === true;
+
   return (
     <div className="min-h-screen bg-[#F6F8FB] pb-24 sm:pb-12 text-[#172033]">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -616,6 +747,83 @@ export default function ResultsPage() {
             Scan ID: {scanId?.slice(0, 8)}...
           </span>
         </div>
+
+        {/* SIH Demo Banner if loaded in demo mode */}
+        {isDemo && (
+          <div className="mb-6 p-3.5 rounded-2xl bg-indigo-50/90 border border-indigo-200 text-indigo-900 shadow-xs flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5">
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-indigo-200/80 text-indigo-950 border border-indigo-300">
+                DEMO SAMPLE
+              </span>
+              <p className="text-xs font-medium">
+                Pre-analyzed inspection loaded for demonstration purposes. Grounded in actual database records.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => navigate('/scan')}
+              className="text-xs font-semibold text-indigo-700 hover:text-indigo-900 underline underline-offset-2 flex-shrink-0 cursor-pointer"
+            >
+              Scan Live Package →
+            </button>
+          </div>
+        )}
+
+        {/* Partial Panel Notification Banner */}
+        {isPartialPanel && (
+          <div className="mb-6 p-4 rounded-2xl bg-amber-50/90 border border-amber-200 shadow-xs">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0 text-amber-700 mt-0.5">
+                  <InformationCircleIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap mb-1">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-amber-200/60 text-amber-900 uppercase tracking-wider">
+                      Package Detected
+                    </span>
+                    <span className="text-xs font-semibold text-amber-900">
+                      Partial Label / Panel Evidence
+                    </span>
+                  </div>
+                  <p className="text-xs text-amber-800 leading-relaxed max-w-2xl">
+                    Some compliance declarations could not be verified from this image. They may be located on another side of the package.
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-2 flex-wrap flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={() => navigate('/scan?mode=upload')}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-600 text-white hover:bg-amber-700 transition-colors cursor-pointer shadow-xs"
+                  title="Scan the back panel as a new inspection"
+                >
+                  Scan Back Panel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/scan')}
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium bg-white text-amber-900 border border-amber-300 hover:bg-amber-100/50 transition-colors cursor-pointer"
+                  title="Scan another package image"
+                >
+                  Scan Another Image
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const el = document.getElementById('declarations-section');
+                    el?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium text-amber-900 hover:underline cursor-pointer"
+                >
+                  Continue with Current Evidence ↓
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Page Header */}
         <header className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -685,10 +893,10 @@ export default function ResultsPage() {
             />
           </div>
 
-          {/* RIGHT COLUMN: Summary, Readability, & Declarations Accordion */}
+          {/* RIGHT COLUMN: Summary, Status Separation, Inspector Review, Readability, & Declarations */}
           <div className="lg:col-span-7 space-y-6">
-            {/* Analysis Summary Card */}
-            <div className="bg-white border border-[#E5EAF0] rounded-2xl p-5 shadow-xs">
+            {/* Analysis Summary Card with Dual Status Model */}
+            <div className="bg-white border border-[#E5EAF0] rounded-2xl p-5 shadow-xs space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E5EAF0]">
                 <div>
                   <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider block">
@@ -698,7 +906,7 @@ export default function ResultsPage() {
                     {detectedProductName}
                   </h2>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                     Verified: {summary.verified}
@@ -716,10 +924,205 @@ export default function ResultsPage() {
                 </div>
               </div>
 
+              {/* Strict Dual-Level Status Model */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-xs">
+                <div>
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
+                    Package Status
+                  </span>
+                  <div className="inline-flex items-center gap-1.5 font-semibold text-[#0F172A]">
+                    <CheckCircleIcon className="w-4 h-4 text-emerald-600" />
+                    <span>Packaged Commodity Detected</span>
+                  </div>
+                </div>
+                <div>
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
+                    Compliance Evidence Status
+                  </span>
+                  <div>
+                    {isPartialPanel ? (
+                      <span className="inline-flex items-center gap-1.5 font-semibold text-amber-700">
+                        <span className="w-2 h-2 rounded-full bg-amber-500" />
+                        Partial Panel Evidence
+                      </span>
+                    ) : summary.potential_issue > 0 ? (
+                      <span className="inline-flex items-center gap-1.5 font-semibold text-rose-700">
+                        <span className="w-2 h-2 rounded-full bg-rose-500" />
+                        Potential Issue Detected
+                      </span>
+                    ) : summary.manual_review > 0 ? (
+                      <span className="inline-flex items-center gap-1.5 font-semibold text-amber-700">
+                        <span className="w-2 h-2 rounded-full bg-amber-500" />
+                        Manual Review Recommended
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 font-semibold text-emerald-700">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                        Sufficient Evidence
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
               {/* Assessment Message */}
-              <div className="pt-3 text-xs text-text-secondary leading-relaxed">
+              <div className="text-xs text-text-secondary leading-relaxed">
                 {validationData?.overall_description ||
                   'Declarations reviewed against Legal Metrology (Packaged Commodities) Rules, 2011.'}
+              </div>
+            </div>
+
+            {/* HUMAN-IN-THE-LOOP INSPECTOR REVIEW CARD */}
+            <div className="bg-white border border-[#E5EAF0] rounded-2xl p-5 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#E5EAF0]">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-blue-50 text-accent flex items-center justify-center font-bold text-xs">
+                    IR
+                  </div>
+                  <div>
+                    <h2 className="text-sm font-bold text-text-primary">
+                      Human-in-the-Loop Inspector Review
+                    </h2>
+                    <p className="text-[11px] text-text-secondary">
+                      AI provides screening support; final legal authority belongs to the authorized inspector.
+                    </p>
+                  </div>
+                </div>
+                {savedReview && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-accent border border-blue-200">
+                    <CheckCircleIcon className="w-3.5 h-3.5 text-accent" />
+                    Status: {savedReview.decision.replace('_', ' ').toUpperCase()}
+                  </span>
+                )}
+              </div>
+
+              <div className="pt-4 space-y-4 text-xs">
+                {/* Current AI Finding Context */}
+                <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 flex items-start gap-2.5">
+                  <InformationCircleIcon className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+                  <div className="text-xs">
+                    <span className="font-semibold text-slate-900 block mb-0.5">Automated AI Finding:</span>
+                    <span>
+                      {validationData?.overall_label || 'Compliance Screening Completed'} — {summary.verified} verified, {summary.manual_review} requires review, {summary.potential_issue} potential issues.
+                    </span>
+                  </div>
+                </div>
+
+                {/* Decision Radio/Button Selector */}
+                <div>
+                  <label className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block mb-2">
+                    Official Inspector Action
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setInspectorDecision('confirmed')}
+                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                        inspectorDecision === 'confirmed'
+                          ? 'border-emerald-600 bg-emerald-50/70 text-emerald-950 font-semibold ring-1 ring-emerald-600'
+                          : 'border-border bg-white text-slate-700 hover:border-slate-300'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className={`w-2 h-2 rounded-full ${inspectorDecision === 'confirmed' ? 'bg-emerald-600' : 'bg-slate-300'}`} />
+                        <span className="text-xs font-semibold">Confirm AI Finding</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500">
+                        Agree with automated declarations check
+                      </p>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setInspectorDecision('manual_review')}
+                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                        inspectorDecision === 'manual_review'
+                          ? 'border-amber-600 bg-amber-50/70 text-amber-950 font-semibold ring-1 ring-amber-600'
+                          : 'border-border bg-white text-slate-700 hover:border-slate-300'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className={`w-2 h-2 rounded-full ${inspectorDecision === 'manual_review' ? 'bg-amber-600' : 'bg-slate-300'}`} />
+                        <span className="text-xs font-semibold">Mark for Manual Review</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500">
+                        Dispute or flag for on-ground physical audit
+                      </p>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setInspectorDecision('better_image_requested')}
+                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                        inspectorDecision === 'better_image_requested'
+                          ? 'border-blue-600 bg-blue-50/70 text-blue-950 font-semibold ring-1 ring-blue-600'
+                          : 'border-border bg-white text-slate-700 hover:border-slate-300'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className={`w-2 h-2 rounded-full ${inspectorDecision === 'better_image_requested' ? 'bg-blue-600' : 'bg-slate-300'}`} />
+                        <span className="text-xs font-semibold">Request Better Image</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500">
+                        Capture higher resolution or other panel
+                      </p>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Inspector Notes */}
+                <div>
+                  <label htmlFor="inspector-notes" className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block mb-1">
+                    Inspector Observations & Notes (Optional)
+                  </label>
+                  <textarea
+                    id="inspector-notes"
+                    rows={2}
+                    value={inspectorNotes}
+                    onChange={(e) => setInspectorNotes(e.target.value)}
+                    placeholder="Enter official audit observations, field officer remarks, or follow-up instructions..."
+                    className="w-full p-2.5 text-xs rounded-xl border border-border focus:border-accent focus:ring-1 focus:ring-accent outline-none bg-[#FAFAFA]"
+                  />
+                </div>
+
+                {/* Save Feedback and Action Button */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+                  <div className="text-[11px] text-slate-500">
+                    {savedReview ? (
+                      <span>
+                        Last saved: {new Date(savedReview.reviewedAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} • Recorded in official SQLite audit trail & PDF report
+                      </span>
+                    ) : (
+                      <span>Decision will be appended to the official PDF inspection report</span>
+                    )}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleSaveReview}
+                    disabled={isSubmittingReview}
+                    className="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-semibold text-white bg-[#163A5F] hover:bg-[#1f4f82] active:bg-[#122e4c] transition-colors cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5 shadow-2xs"
+                  >
+                    {isSubmittingReview ? (
+                      <>
+                        <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <span>Saving Decision...</span>
+                      </>
+                    ) : (
+                      <>
+                        <CheckIcon className="w-3.5 h-3.5" />
+                        <span>Save Decision</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {reviewSavedMessage && (
+                  <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center gap-1.5">
+                    <CheckCircleIcon className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>{reviewSavedMessage}</span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -842,7 +1245,7 @@ export default function ResultsPage() {
             )}
 
             {/* Declarations Section Header */}
-            <div className="flex items-center justify-between">
+            <div id="declarations-section" className="flex items-center justify-between scroll-mt-6">
               <h2 className="text-sm font-bold text-text-primary">
                 Mandatory Declarations (Rule 6)
               </h2>

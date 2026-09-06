@@ -84,6 +84,24 @@ export async function getScanDetail(scanId: string): Promise<ScanDetailResponse>
   return res.json();
 }
 
+export async function submitInspectorReview(
+  scanId: string,
+  payload: { decision: string; notes?: string }
+): Promise<{ success: boolean; scan_id: string; inspector_decision: string; inspector_notes?: string; inspector_reviewed_at: string }> {
+  const res = await fetch(`${API_BASE}/api/scans/${scanId}/review`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({ detail: 'Failed to submit review.' }));
+    throw new ApiError(res.status, errorData.detail || 'Failed to save inspector review.');
+  }
+  return res.json();
+}
+
 export async function getScanEvidence(scanId: string): Promise<EvidenceResponse> {
   const res = await fetch(`${API_BASE}/api/scans/${scanId}/evidence`);
   if (!res.ok) {

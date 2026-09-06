@@ -18,6 +18,8 @@ from app.schemas.scan import (
     EvidenceResponse,
     CopilotQueryRequest,
     CopilotResponse,
+    InspectorReviewRequest,
+    InspectorReviewResponse,
 )
 from app.services.image_service import ImageService
 from app.services.ocr_service import OcrService
@@ -89,6 +91,7 @@ async def analyze_scan(
             is_eligible=is_eligible,
             eligibility_status=eligibility_status,
             eligibility_reason=eligibility_reason,
+            is_partial_panel=eligibility.get("is_partial_panel", False),
         )
 
         # Step 5: Persist in database
@@ -186,7 +189,17 @@ def validate_scan(
             message="Image not eligible for packaged commodity compliance screening",
         )
 
-    comp_res = compliance_service.evaluate(scan.extracted_fields, scan.raw_ocr_text or "")
+    # Re-evaluate eligibility for panel status
+    ocr_result = {"lines": scan.ocr_results or [], "raw_text": scan.raw_ocr_text or ""}
+    eligibility = label_gate.evaluate_eligibility(ocr_result)
+
+    comp_res = compliance_service.evaluate(
+        scan.extracted_fields,
+        scan.raw_ocr_text or "",
+        is_eligible=True,
+        eligibility_status=LabelEligibilityStatus.ELIGIBLE_FOR_PACKAGE_ANALYSIS,
+        is_partial_panel=eligibility.get("is_partial_panel", False),
+    )
 
     scan.compliance_status = "completed"
     scan.overall_assessment = comp_res["overall_assessment"]
@@ -206,6 +219,9 @@ def validate_scan(
         summary=ComplianceSummary(**comp_res["summary"]),
         results=[ComplianceRuleResultItem(**r) for r in comp_res["rule_results"]],
         is_eligible=True,
+        is_partial_panel=eligibility.get("is_partial_panel", False),
+        package_eligibility=eligibility.get("package_eligibility"),
+        compliance_evidence=eligibility.get("compliance_evidence"),
         eligibility_status=LabelEligibilityStatus.ELIGIBLE_FOR_PACKAGE_ANALYSIS,
         validated_at=now,
         message="Compliance validation completed successfully",
@@ -226,6 +242,9 @@ def get_scan_detail(
         LabelEligibilityStatus.NO_READABLE_TEXT,
     ]
 
+    ocr_result = {"lines": scan.ocr_results or [], "raw_text": scan.raw_ocr_text or ""}
+    eligibility = label_gate.evaluate_eligibility(ocr_result) if is_eligible else {}
+
     return ScanDetailResponse(
         id=scan.id,
         filename=scan.filename,
@@ -239,6 +258,9 @@ def get_scan_detail(
         compliance_summary=scan.compliance_summary,
         compliance_results=scan.compliance_results,
         is_eligible=is_eligible,
+        is_partial_panel=eligibility.get("is_partial_panel", False),
+        package_eligibility=eligibility.get("package_eligibility"),
+        compliance_evidence=eligibility.get("compliance_evidence"),
         eligibility_status=scan.overall_assessment,
         created_at=scan.created_at,
         analyzed_at=scan.analyzed_at,
@@ -247,6 +269,49 @@ def get_scan_detail(
         ocr_results=scan.ocr_results,
         extracted_fields=scan.extracted_fields,
         analysis_error=scan.analysis_error,
+        inspector_decision=scan.inspector_decision,
+        inspector_notes=scan.inspector_notes,
+        inspector_reviewed_at=scan.inspector_reviewed_at,
+    )
+
+
+@router.post("/{scan_id}/review", response_model=InspectorReviewResponse)
+def submit_inspector_review(
+    scan_id: str,
+    payload: InspectorReviewRequest,
+    db: Session = Depends(get_db),
+) -> InspectorReviewResponse:
+    """
+    Record an official Human-in-the-Loop Inspector Review decision:
+    - decision: "confirmed" | "manual_review" | "better_image_requested"
+    - notes: optional inspector observations
+    Persists decision and timestamp in database for audit traceability.
+    """
+    valid_decisions = {"confirmed", "manual_review", "better_image_requested"}
+    if payload.decision not in valid_decisions:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid decision '{payload.decision}'. Must be one of: {sorted(list(valid_decisions))}",
+        )
+
+    image_service = ImageService(db)
+    scan = image_service.get_scan(scan_id)
+
+    now = datetime.now(timezone.utc)
+    scan.inspector_decision = payload.decision
+    scan.inspector_notes = payload.notes.strip() if payload.notes else None
+    scan.inspector_reviewed_at = now
+
+    db.commit()
+    db.refresh(scan)
+
+    return InspectorReviewResponse(
+        success=True,
+        scan_id=scan.id,
+        inspector_decision=scan.inspector_decision,
+        inspector_notes=scan.inspector_notes,
+        inspector_reviewed_at=scan.inspector_reviewed_at,
+        message="Inspector review decision recorded successfully",
     )
 
 
@@ -505,6 +570,9 @@ def get_scan_report(
         "original_filename": scan.original_filename,
         "extracted_fields": scan.extracted_fields or {},
         "created_at": scan.created_at,
+        "inspector_decision": scan.inspector_decision,
+        "inspector_notes": scan.inspector_notes,
+        "inspector_reviewed_at": scan.inspector_reviewed_at,
     }
 
     validation_data = {

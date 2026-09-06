@@ -11,30 +11,33 @@ const navItems = [
 
 export function BottomNav() {
   const location = useLocation();
-  // Only show on pages where it makes sense
   const hiddenPaths = ['/splash', '/processing', '/status'];
   if (hiddenPaths.some(p => location.pathname.startsWith(p))) return null;
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-border sm:hidden"
+      className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#E2E8F0] shadow-md sm:hidden"
       aria-label="Mobile navigation"
     >
-      <div className="flex">
+      <div className="flex items-center justify-around h-16">
         {navItems.map(({ to, label, Icon, ActiveIcon }) => {
-          const isActive = location.pathname === to;
-          const Ic = isActive ? ActiveIcon : Icon;
+          const isActive =
+            to === '/'
+              ? location.pathname === '/' || location.pathname === '/dashboard' || location.pathname === '/home'
+              : location.pathname.startsWith(to);
+          const CurrentIcon = isActive ? ActiveIcon : Icon;
+
           return (
             <Link
               key={to}
               to={to}
               className={[
-                'flex-1 flex flex-col items-center gap-0.5 py-3 text-xs font-medium transition-colors no-underline',
-                isActive ? 'text-accent' : 'text-text-secondary',
+                'flex-1 flex flex-col items-center justify-center h-full gap-1 text-[11px] font-medium transition-colors no-underline cursor-pointer',
+                isActive ? 'text-[#163A5F] font-semibold' : 'text-[#667085] hover:text-[#172033]',
               ].join(' ')}
               aria-current={isActive ? 'page' : undefined}
             >
-              <Ic className="w-5 h-5" aria-hidden />
+              <CurrentIcon className={`w-5 h-5 ${isActive ? 'text-[#163A5F]' : 'text-[#667085]'}`} aria-hidden />
               <span>{label}</span>
             </Link>
           );

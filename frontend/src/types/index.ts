@@ -94,9 +94,12 @@ export interface OcrSummary {
 
 export interface LabelDetectionResult {
   is_eligible: boolean;
-  status: 'ELIGIBLE_FOR_PACKAGE_ANALYSIS' | 'INSUFFICIENT_PACKAGE_LABEL_EVIDENCE' | 'NO_READABLE_TEXT';
+  package_eligibility?: 'ELIGIBLE_PACKAGE' | 'INELIGIBLE_NON_PACKAGE' | 'UNCERTAIN';
+  compliance_evidence?: 'SUFFICIENT_FOR_SCREENING' | 'PARTIAL_PANEL_EVIDENCE' | 'INSUFFICIENT_IMAGE_QUALITY';
+  status: 'ELIGIBLE_FOR_PACKAGE_ANALYSIS' | 'INSUFFICIENT_PACKAGE_LABEL_EVIDENCE' | 'NO_READABLE_TEXT' | 'PARTIAL_PANEL_EVIDENCE';
   matched_categories: string[];
   signal_score: number;
+  is_partial_panel?: boolean;
   reason: string;
   message: string;
 }
@@ -122,7 +125,8 @@ export type OverallAssessment =
   | 'potential_issues_detected'
   | 'INSUFFICIENT_PACKAGE_LABEL_EVIDENCE'
   | 'NO_READABLE_TEXT'
-  | 'insufficient_label_evidence';
+  | 'insufficient_label_evidence'
+  | 'PARTIAL_PANEL_EVIDENCE';
 
 export interface ComplianceRuleResult {
   rule_id: string;
@@ -155,6 +159,9 @@ export interface ValidationResponse {
   summary: ComplianceSummary;
   results: ComplianceRuleResult[];
   is_eligible?: boolean;
+  is_partial_panel?: boolean;
+  package_eligibility?: string;
+  compliance_evidence?: string;
   eligibility_status?: string;
   eligibility_reason?: string;
   validated_at: string;
@@ -181,7 +188,24 @@ export interface ScanDetailResponse {
   extracted_fields?: ExtractedFields | null;
   analysis_error?: string | null;
   is_eligible?: boolean;
+  is_partial_panel?: boolean;
+  package_eligibility?: string | null;
+  compliance_evidence?: string | null;
   eligibility_status?: string | null;
+  inspector_decision?: 'confirmed' | 'manual_review' | 'better_image_requested' | null;
+  inspector_notes?: string | null;
+  inspector_reviewed_at?: string | null;
+}
+
+export type InspectorDecisionType = 'confirmed' | 'manual_review' | 'better_image_requested';
+
+export interface InspectorReviewResponse {
+  success: boolean;
+  scan_id: string;
+  inspector_decision: InspectorDecisionType;
+  inspector_notes?: string | null;
+  inspector_reviewed_at: string;
+  message: string;
 }
 
 // --- Phase 4: Visual Evidence & Copilot Types ---
@@ -267,7 +291,9 @@ export type ProcessingStepId =
   | 'uploaded'
   | 'preparing'
   | 'ocr'
+  | 'identifying'
   | 'extracting'
+  | 'reviewing'
   | 'finishing';
 
 export interface ProcessingStep {

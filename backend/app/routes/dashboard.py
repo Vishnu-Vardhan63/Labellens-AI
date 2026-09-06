@@ -68,6 +68,9 @@ def _format_scan_item(s: Scan) -> Dict[str, Any]:
         "status_category": status_category,
         "is_eligible": is_eligible,
         "summary": s.compliance_summary or {"verified": 0, "manual_review": 0, "potential_issue": 0, "total_rules": 0},
+        "inspector_decision": s.inspector_decision,
+        "inspector_notes": s.inspector_notes,
+        "inspector_reviewed_at": s.inspector_reviewed_at.isoformat() if s.inspector_reviewed_at else None,
     }
 
 @router.get("/api/dashboard/stats")

@@ -59,6 +59,11 @@ class Scan(Base):
     compliance_results = Column(JSON, nullable=True)
     validated_at = Column(DateTime(timezone=True), nullable=True)
 
+    # Final Phase: Human-in-the-Loop Inspector Review
+    inspector_decision = Column(String(50), nullable=True)  # confirmed, manual_review, better_image_requested
+    inspector_notes = Column(Text, nullable=True)
+    inspector_reviewed_at = Column(DateTime(timezone=True), nullable=True)
+
     created_at = Column(
         DateTime(timezone=True),
         nullable=False,

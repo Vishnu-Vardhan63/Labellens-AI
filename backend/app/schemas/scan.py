@@ -64,6 +64,9 @@ class ScanDetailResponse(BaseModel):
     compliance_summary: Optional[dict] = None
     compliance_results: Optional[list] = None
     is_eligible: Optional[bool] = True
+    is_partial_panel: Optional[bool] = False
+    package_eligibility: Optional[str] = None
+    compliance_evidence: Optional[str] = None
     eligibility_status: Optional[str] = None
     created_at: datetime
     analyzed_at: Optional[datetime] = None
@@ -72,6 +75,25 @@ class ScanDetailResponse(BaseModel):
     ocr_results: Optional[list] = None
     extracted_fields: Optional[dict] = None
     analysis_error: Optional[str] = None
+    inspector_decision: Optional[str] = None
+    inspector_notes: Optional[str] = None
+    inspector_reviewed_at: Optional[datetime] = None
+
+
+class InspectorReviewRequest(BaseModel):
+    """Request payload for POST /api/scans/{scan_id}/review."""
+    decision: str = Field(..., description="confirmed | manual_review | better_image_requested")
+    notes: Optional[str] = Field(None, description="Optional inspector audit notes")
+
+
+class InspectorReviewResponse(BaseModel):
+    """Response returned by POST /api/scans/{scan_id}/review."""
+    success: bool = True
+    scan_id: str
+    inspector_decision: str
+    inspector_notes: Optional[str] = None
+    inspector_reviewed_at: datetime
+    message: str = "Inspector review decision recorded successfully"
 
 
 class ComplianceRuleResultItem(BaseModel):
@@ -106,6 +128,9 @@ class ValidationResponse(BaseModel):
     summary: ComplianceSummary
     results: List[ComplianceRuleResultItem]
     is_eligible: bool = True
+    is_partial_panel: bool = False
+    package_eligibility: Optional[str] = None
+    compliance_evidence: Optional[str] = None
     eligibility_status: Optional[str] = None
     eligibility_reason: Optional[str] = None
     validated_at: datetime

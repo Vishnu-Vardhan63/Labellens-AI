@@ -60,6 +60,9 @@ def create_tables() -> None:
             ("compliance_summary", "JSON"),
             ("compliance_results", "JSON"),
             ("validated_at", "DATETIME"),
+            ("inspector_decision", "VARCHAR(50)"),
+            ("inspector_notes", "TEXT"),
+            ("inspector_reviewed_at", "DATETIME"),
         ]
         with engine.begin() as conn:
             for col_name, col_type in new_cols:

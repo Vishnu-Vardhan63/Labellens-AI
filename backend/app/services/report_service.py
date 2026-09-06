@@ -136,7 +136,7 @@ class ReportService:
         story.append(Spacer(1, 16))
 
         # 6. Inspector Sign-Off Block
-        story.extend(self._build_signoff_block(styles))
+        story.extend(self._build_signoff_block(scan_data, styles))
 
         doc.build(story, canvasmaker=NumberedCanvas)
         buffer.seek(0)
@@ -598,25 +598,59 @@ class ReportService:
 
         return items
 
-    def _build_signoff_block(self, styles: Dict[str, ParagraphStyle]) -> List[Any]:
-        signoff_data = [
-            [
-                Paragraph("<b>FIELD INSPECTION AUDIT SIGN-OFF</b>", styles["Caption"]),
-                Paragraph("<b>ACTION TAKEN</b>", styles["Caption"]),
-            ],
-            [
-                Paragraph("Inspecting Officer Name: ____________________________", styles["Body"]),
-                Paragraph("[  ] Verified Compliant on Physical Package", styles["Body"]),
-            ],
-            [
-                Paragraph("Designation / Jurisdiction: ________________________", styles["Body"]),
-                Paragraph("[  ] Notice Issued for Non-Compliance", styles["Body"]),
-            ],
-            [
-                Paragraph("Date & Time: __________________ Signature: _________", styles["Body"]),
-                Paragraph("[  ] Sample Seized for Lab Verification", styles["Body"]),
-            ],
-        ]
+    def _build_signoff_block(self, scan_data: Dict[str, Any], styles: Dict[str, ParagraphStyle]) -> List[Any]:
+        insp_decision = scan_data.get("inspector_decision")
+        insp_notes = scan_data.get("inspector_notes")
+        insp_time = scan_data.get("inspector_reviewed_at")
+
+        if insp_decision:
+            dec_label = {
+                "confirmed": "Confirmed AI Finding",
+                "manual_review": "Marked for Manual Review",
+                "better_image_requested": "Better Image Requested",
+            }.get(insp_decision, insp_decision.replace("_", " ").title())
+
+            reviewed_str = ""
+            if isinstance(insp_time, datetime):
+                reviewed_str = insp_time.strftime("%d-%b-%Y %H:%M UTC")
+            elif insp_time:
+                reviewed_str = str(insp_time)[:16]
+
+            notes_str = f"<br/><b>Inspector Notes:</b> {self._sanitize(insp_notes)}" if insp_notes else ""
+
+            signoff_data = [
+                [
+                    Paragraph("<b>FIELD INSPECTOR REVIEW AUDIT RECORD</b>", styles["Caption"]),
+                    Paragraph("<b>OFFICIAL VERDICT</b>", styles["Caption"]),
+                ],
+                [
+                    Paragraph(f"<b>Inspector Decision:</b> <font color='#163A5F'><b>{dec_label}</b></font>{notes_str}", styles["Body"]),
+                    Paragraph(f"<b>Audit Timestamp:</b><br/>{reviewed_str or 'Recorded'}<br/><br/><b>Status:</b> Official Inspector Review Completed", styles["Body"]),
+                ],
+                [
+                    Paragraph("Inspecting Officer Name: ____________________________", styles["Body"]),
+                    Paragraph("Signature: ________________________", styles["Body"]),
+                ],
+            ]
+        else:
+            signoff_data = [
+                [
+                    Paragraph("<b>FIELD INSPECTION AUDIT SIGN-OFF</b>", styles["Caption"]),
+                    Paragraph("<b>ACTION TAKEN</b>", styles["Caption"]),
+                ],
+                [
+                    Paragraph("Inspecting Officer Name: ____________________________", styles["Body"]),
+                    Paragraph("[  ] Verified Compliant on Physical Package", styles["Body"]),
+                ],
+                [
+                    Paragraph("Designation / Jurisdiction: ________________________", styles["Body"]),
+                    Paragraph("[  ] Notice Issued for Non-Compliance", styles["Body"]),
+                ],
+                [
+                    Paragraph("Date & Time: __________________ Signature: _________", styles["Body"]),
+                    Paragraph("[  ] Sample Seized for Lab Verification", styles["Body"]),
+                ],
+            ]
 
         signoff_table = Table(signoff_data, colWidths=[310, 213])
         signoff_table.setStyle(

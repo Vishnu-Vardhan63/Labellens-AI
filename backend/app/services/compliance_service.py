@@ -67,10 +67,12 @@ class ComplianceService:
         is_eligible: bool = True,
         eligibility_status: str = "ELIGIBLE_FOR_PACKAGE_ANALYSIS",
         eligibility_reason: str = "",
+        is_partial_panel: bool = False,
     ) -> Dict[str, Any]:
         """
         Evaluate extracted package fields against all configured compliance rules.
         If is_eligible is False, screening is suspended without false violations.
+        If is_partial_panel is True, informs that declarations may reside on other package panels.
         """
         if not is_eligible:
             is_no_text = eligibility_status == "NO_READABLE_TEXT"
@@ -121,6 +123,13 @@ class ComplianceService:
             overall_description = (
                 "A structural declaration issue was detected. Manual inspection of the physical package is recommended."
             )
+        elif is_partial_panel:
+            overall = OverallAssessment.MANUAL_REVIEW_RECOMMENDED
+            overall_label = "Partial Panel Evidence"
+            overall_description = (
+                "This appears to be a packaged commodity front or partial panel. "
+                "Some mandatory declarations could not be verified from this image and may be located on another side of the package."
+            )
         elif potential_issue_count > 0 or manual_review_count > 0:
             overall = OverallAssessment.MANUAL_REVIEW_RECOMMENDED
             overall_label = "Manual Review Recommended"
@@ -152,6 +161,7 @@ class ComplianceService:
             },
             "rule_results": rule_results,
             "is_eligible": True,
+            "is_partial_panel": is_partial_panel,
             "eligibility_status": eligibility_status,
             "eligibility_reason": eligibility_reason,
         }
