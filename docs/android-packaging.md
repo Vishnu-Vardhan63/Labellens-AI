@@ -1,8 +1,8 @@
-﻿# LABEL LENS AI — Android APK Packaging Guide
+# LABEL LENS AI — Android APK Packaging Guide
 
 **Project**: LABEL LENS AI ("Smart Packaged Commodity Compliance Assistant")  
 **Hackathon Problem Statement**: SIH26034  
-**Framework**: Capacitor v7 + React 18 + Vite 5 + Tailwind v4  
+**Framework**: Capacitor v8 + React 18 + Vite 5 + Tailwind v4  
 
 ---
 

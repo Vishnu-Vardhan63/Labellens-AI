@@ -131,6 +131,8 @@ class ReportService:
 
         # 5. Detailed Declaration Findings
         story.extend(self._build_detailed_findings(validation_data, styles))
+        story.append(Spacer(1, 14))
+        story.extend(self._build_readability_section(validation_data, styles))
         story.append(Spacer(1, 16))
 
         # 6. Inspector Sign-Off Block
@@ -227,7 +229,7 @@ class ReportService:
                 Paragraph("<b>SMART INDIA HACKATHON</b><br/>Problem Statement: SIH26034", styles["Subtitle"]),
             ],
             [
-                Paragraph("Smart Packaged Commodity Declaration Review", styles["Subtitle"]),
+                Paragraph("Digital Inspection Support Report · Packaged Commodities", styles["Subtitle"]),
                 Paragraph("Legal Metrology (Packaged Commodities) Rules, 2011", styles["Subtitle"]),
             ],
         ]
@@ -481,6 +483,118 @@ class ReportService:
 
             # Keep card content together to avoid awkward page-breaks
             items.append(KeepTogether([card_table, Spacer(1, 6)]))
+
+        return items
+
+
+    def _build_readability_section(
+        self,
+        validation_data: Dict[str, Any],
+        styles: Dict[str, ParagraphStyle],
+    ) -> List[Any]:
+        items = []
+        items.append(Paragraph("<b>4. Label Readability & Technical Image Quality Assessment</b>", styles["SectionHeading"]))
+        items.append(Spacer(1, 4))
+
+        readability = validation_data.get("readability") or {}
+        img_q = readability.get("image_quality") or {}
+        decls = readability.get("declarations") or {}
+        disclaimer = readability.get("disclaimer") or (
+            "Visual readability assessment only. Legal font-size verification under the "
+            "Legal Metrology (Packaged Commodities) Rules, 2011 requires physical package "
+            "dimensions and calibrated measurement."
+        )
+
+        res_str = f"{img_q.get('width', 0)} x {img_q.get('height', 0)} ({img_q.get('megapixels', 0)} MP)"
+        sharp_str = f"{img_q.get('sharpness_label', 'Unknown')} (Score: {img_q.get('sharpness_score', 0)})"
+        contrast_str = f"{img_q.get('contrast_label', 'Unknown')} (Std: {img_q.get('contrast_score', 0)})"
+        overall_read = readability.get("overall_readability", "Clear & Legible")
+
+        overview_data = [
+            [
+                Paragraph("<b>Image Resolution:</b>", styles["Caption"]),
+                Paragraph(res_str, styles["Body"]),
+                Paragraph("<b>Clarity / Sharpness:</b>", styles["Caption"]),
+                Paragraph(sharp_str, styles["Body"]),
+            ],
+            [
+                Paragraph("<b>Luminance Contrast:</b>", styles["Caption"]),
+                Paragraph(contrast_str, styles["Body"]),
+                Paragraph("<b>Overall Readability:</b>", styles["Caption"]),
+                Paragraph(f"<b>{overall_read}</b>", styles["BodyBold"]),
+            ],
+        ]
+
+        overview_table = Table(overview_data, colWidths=[105, 155, 115, 148])
+        overview_table.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), COLOR_SURFACE),
+            ("BOX", (0, 0), (-1, -1), 0.5, COLOR_BORDER),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("TOPPADDING", (0, 0), (-1, -1), 4),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+            ("LEFTPADDING", (0, 0), (-1, -1), 6),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+        ]))
+        items.append(overview_table)
+        items.append(Spacer(1, 8))
+
+        decl_rows = [
+            [
+                Paragraph("<b>Tracked Declaration</b>", styles["Caption"]),
+                Paragraph("<b>Text Clarity</b>", styles["Caption"]),
+                Paragraph("<b>Clarity Details</b>", styles["Caption"]),
+                Paragraph("<b>OCR Conf</b>", styles["Caption"]),
+                Paragraph("<b>Readability Status</b>", styles["Caption"]),
+            ]
+        ]
+
+        for k, v in decls.items():
+            disp_name = v.get("display_name", k)
+            clarity = v.get("text_clarity", "Normal")
+            conf = v.get("ocr_confidence", "N/A")
+            read_stat = v.get("readability", "Good")
+
+            if read_stat == "Good":
+                stat_badge = "<font color='#16A34A'><b>Good</b></font>"
+            elif read_stat == "Moderate":
+                stat_badge = "<font color='#D97706'><b>Moderate</b></font>"
+            elif read_stat == "Not Detected":
+                stat_badge = "<font color='#64748B'><b>Not Detected</b></font>"
+            else:
+                stat_badge = "<font color='#DC2626'><b>Low Readability</b></font>"
+
+            decl_rows.append([
+                Paragraph(disp_name, styles["BodyBold"]),
+                Paragraph(clarity, styles["Body"]),
+                Paragraph(v.get("notes", ""), styles["Body"]),
+                Paragraph(str(conf), styles["Body"]),
+                Paragraph(stat_badge, styles["Badge"]),
+            ])
+
+        if len(decl_rows) > 1:
+            dt = Table(decl_rows, colWidths=[120, 95, 178, 55, 75])
+            dt.setStyle(TableStyle([
+                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#F1F5F9")),
+                ("GRID", (0, 0), (-1, -1), 0.5, COLOR_BORDER),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ("TOPPADDING", (0, 0), (-1, -1), 3),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+                ("LEFTPADDING", (0, 0), (-1, -1), 5),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 5),
+            ]))
+            items.append(dt)
+            items.append(Spacer(1, 6))
+
+        disc_table = Table([[Paragraph(f"<b>Statutory Notice:</b> {disclaimer}", styles["Disclaimer"])]], colWidths=[523])
+        disc_table.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#FFFBEB")),
+            ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#FDE68A")),
+            ("TOPPADDING", (0, 0), (-1, -1), 5),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+            ("LEFTPADDING", (0, 0), (-1, -1), 8),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ]))
+        items.append(disc_table)
 
         return items
 

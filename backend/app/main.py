@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
 from app.database import create_tables
-from app.routes import health, upload, analysis
+from app.routes import health, upload, analysis, dashboard
 
 settings = get_settings()
 
@@ -22,9 +22,10 @@ app = FastAPI(
     title="Label Lens AI API",
     description=(
         "Backend API for the Label Lens AI Smart Packaged Commodity "
-        "Compliance Assistant (SIH26034). Phase 2: Real OCR and Package Data Extraction."
+        "Compliance Assistant (SIH26034). Production Legal Metrology Compliance, "
+        "Explainable Visual Evidence, Eligibility Gate & AI Copilot."
     ),
-    version="2.0.0",
+    version="1.0.0",
     lifespan=lifespan,
 )
 
@@ -41,3 +42,4 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(upload.router)
 app.include_router(analysis.router)
+app.include_router(dashboard.router)

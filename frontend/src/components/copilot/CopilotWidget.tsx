@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import {
   SparklesIcon,
   PaperAirplaneIcon,
@@ -24,10 +24,10 @@ interface CopilotWidgetProps {
 }
 
 const PRESET_CHIPS = [
-  { label: 'Why does this need review?', intent: 'WHY_REVIEW' },
-  { label: 'What was detected?', intent: 'SHOW_DETECTED_INFORMATION' },
-  { label: 'Show potential issues', intent: 'SHOW_POTENTIAL_ISSUES' },
-  { label: 'What to check manually?', intent: 'WHAT_TO_CHECK_MANUALLY' },
+  { label: 'Explain this result', intent: 'EXPLAIN_RESULT' },
+  { label: 'What needs manual review?', intent: 'WHAT_TO_CHECK_MANUALLY' },
+  { label: 'Show detected evidence', intent: 'SHOW_DETECTED_INFORMATION' },
+  { label: 'Why was this flagged?', intent: 'SHOW_POTENTIAL_ISSUES' },
 ];
 
 export function CopilotWidget({ scanId, onHighlightField }: CopilotWidgetProps) {
@@ -35,7 +35,7 @@ export function CopilotWidget({ scanId, onHighlightField }: CopilotWidgetProps) 
     {
       id: 'welcome',
       sender: 'assistant',
-      text: 'Hello! I am your automated Legal Metrology inspection assistant for this package. Ask me about detected declarations, review reasons, or potential compliance issues.',
+      text: 'Legal Metrology Inspection Assistant active. Ask about detected declarations, review reasons, or evidence grounding for this package.',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -60,7 +60,7 @@ export function CopilotWidget({ scanId, onHighlightField }: CopilotWidgetProps) 
     try {
       const res: CopilotResponse = await queryCopilot(scanId, {
         intent: payload.intent,
-        query: payload.query,
+        query: payload.query || payload.displayQuestion,
       });
 
       const assistantMsg: CopilotMessage = {
@@ -75,9 +75,9 @@ export function CopilotWidget({ scanId, onHighlightField }: CopilotWidgetProps) 
       setMessages(prev => [...prev, assistantMsg]);
     } catch (err: unknown) {
       const errorMsg: CopilotMessage = {
-        id: `err-${Date.now()}`,
+        id: `error-${Date.now()}`,
         sender: 'assistant',
-        text: 'The assistant could not retrieve analysis information for this query. Please ensure the scan is analyzed.',
+        text: 'Inspection Assistant is unable to answer at this time. Please verify backend connection.',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages(prev => [...prev, errorMsg]);
@@ -87,45 +87,42 @@ export function CopilotWidget({ scanId, onHighlightField }: CopilotWidgetProps) 
   };
 
   const fieldDisplayNames: Record<string, string> = {
-    product_name: 'Product Name',
+    product_name: 'Product Identity',
     mrp: 'Maximum Retail Price',
     net_quantity: 'Net Quantity',
     manufacturer_packer: 'Manufacturer / Packer',
-    date_information: 'Dates & Batch',
+    date_information: 'Date Information',
     consumer_care: 'Consumer Care',
   };
 
   return (
-    <div className="rounded-2xl border border-blue-200/80 bg-gradient-to-b from-blue-50/50 to-white shadow-xs overflow-hidden">
+    <div className="rounded-xl border border-[#E5EAF0] bg-white shadow-2xs overflow-hidden">
       {/* Widget Header */}
-      <div className="px-5 py-3.5 border-b border-blue-100 flex items-center justify-between bg-white/70 backdrop-blur-xs">
+      <div className="px-5 py-3 border-b border-[#E5EAF0] flex items-center justify-between bg-[#F8F9FA]">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-accent flex items-center justify-center text-white shadow-xs">
+          <div className="w-7 h-7 rounded-lg bg-[#163A5F] flex items-center justify-center text-white text-xs font-bold">
             <SparklesIcon className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-text-primary tracking-tight flex items-center gap-1.5">
-              <span>LABEL LENS AI Assistant</span>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-blue-100 text-accent">
-                Inspection Copilot
-              </span>
+            <h3 className="text-sm font-bold text-[#172033] tracking-tight">
+              Inspection Assistant
             </h3>
-            <p className="text-[11px] text-text-secondary">
-              Grounded package screening assistant · Zero hallucination
+            <p className="text-[11px] text-[#667085]">
+              Grounded package screening analysis · Zero hallucination
             </p>
           </div>
         </div>
 
-        <div className="text-[11px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full flex items-center gap-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Active</span>
+        <div className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md flex items-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+          <span>Grounded</span>
         </div>
       </div>
 
       {/* Suggested Quick Inquiry Chips */}
-      <div className="px-4 py-2.5 bg-slate-50/60 border-b border-border flex items-center gap-1.5 overflow-x-auto text-xs no-scrollbar">
-        <span className="text-[11px] text-text-secondary font-medium whitespace-nowrap mr-1">
-          Suggested:
+      <div className="px-4 py-2.5 bg-white border-b border-[#E5EAF0] flex items-center gap-1.5 overflow-x-auto text-xs no-scrollbar">
+        <span className="text-[10px] text-[#667085] font-semibold uppercase tracking-wider whitespace-nowrap mr-1">
+          Quick Actions:
         </span>
         {PRESET_CHIPS.map(chip => (
           <button
@@ -133,7 +130,7 @@ export function CopilotWidget({ scanId, onHighlightField }: CopilotWidgetProps) 
             type="button"
             disabled={isLoading}
             onClick={() => handleSend({ intent: chip.intent, displayQuestion: chip.label })}
-            className="px-2.5 py-1 rounded-full border border-blue-200 bg-white text-accent hover:bg-blue-50 font-medium text-xs whitespace-nowrap cursor-pointer transition-colors disabled:opacity-50"
+            className="px-2.5 py-1 rounded-md border border-[#E5EAF0] bg-[#F8F9FA] hover:bg-[#EFF6FF] hover:border-[#BFDBFE] text-[#163A5F] font-medium text-xs whitespace-nowrap cursor-pointer transition disabled:opacity-50"
           >
             {chip.label}
           </button>

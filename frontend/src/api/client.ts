@@ -6,6 +6,9 @@ import type {
   EvidenceResponse,
   CopilotResponse,
   HealthResponse,
+  ReadabilityResponse,
+  DashboardStatsResponse,
+  ScanHistoryResponse,
 } from '../types';
 
 function resolveApiBase(): string {
@@ -118,6 +121,45 @@ export async function downloadReport(scanId: string): Promise<Blob> {
 
 export function getScanReportUrl(scanId: string): string {
   return `${API_BASE}/api/scans/${scanId}/report`;
+}
+
+export async function getScanReadability(scanId: string): Promise<ReadabilityResponse> {
+  const res = await fetch(`${API_BASE}/api/scans/${scanId}/readability`);
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({ detail: 'Failed to fetch readability.' }));
+    throw new ApiError(res.status, errorData.detail || 'Failed to fetch readability assessment.');
+  }
+  return res.json();
+}
+
+export async function getDashboardStats(): Promise<DashboardStatsResponse> {
+  const res = await fetch(`${API_BASE}/api/dashboard/stats`);
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({ detail: 'Failed to fetch dashboard stats.' }));
+    throw new ApiError(res.status, errorData.detail || 'Failed to fetch dashboard statistics.');
+  }
+  return res.json();
+}
+
+export async function getScanHistory(params?: {
+  query?: string;
+  status?: string;
+  limit?: number;
+  offset?: number;
+}): Promise<ScanHistoryResponse> {
+  const q = new URLSearchParams();
+  if (params?.query) q.set('query', params.query);
+  if (params?.status && params.status !== 'all') q.set('status', params.status);
+  if (params?.limit) q.set('limit', params.limit.toString());
+  if (params?.offset) q.set('offset', params.offset.toString());
+
+  const url = `${API_BASE}/api/scans${q.toString() ? `?${q.toString()}` : ''}`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({ detail: 'Failed to fetch scan history.' }));
+    throw new ApiError(res.status, errorData.detail || 'Failed to fetch scan history.');
+  }
+  return res.json();
 }
 
 

@@ -27,6 +27,7 @@ from app.services.evidence_service import EvidenceService
 from app.services.copilot_service import CopilotService
 from app.services.report_service import ReportService
 from app.services.label_gate_service import LabelGateService, LabelEligibilityStatus
+from app.services.readability_service import readability_service
 
 logger = logging.getLogger(__name__)
 
@@ -361,6 +362,45 @@ def get_scan_evidence(
     )
 
 
+@router.get("/{scan_id}/readability")
+def get_scan_readability(
+    scan_id: str,
+    db: Session = Depends(get_db),
+):
+    """
+    Get objective label readability and visual clarity assessment for the scan.
+    Includes Laplacian blur variance, contrast score, resolution, and per-declaration text clarity.
+    """
+    image_service = ImageService(db)
+    scan = image_service.get_scan(scan_id)
+
+    if not scan.extracted_fields:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Scan has not been analyzed yet. Run /analyze before fetching readability.",
+        )
+
+    is_eligible = scan.compliance_status != "not_performed" and scan.overall_assessment not in [
+        LabelEligibilityStatus.INSUFFICIENT_PACKAGE_LABEL_EVIDENCE,
+        LabelEligibilityStatus.NO_READABLE_TEXT,
+    ]
+
+    img_quality = readability_service.evaluate_image_quality(scan.file_path)
+    readability_data = readability_service.evaluate_declarations_readability(
+        extracted_fields=scan.extracted_fields,
+        ocr_lines=scan.ocr_results or [],
+        image_quality=img_quality,
+        is_eligible=is_eligible,
+    )
+
+    return {
+        "success": True,
+        "scan_id": scan.id,
+        "is_eligible": is_eligible,
+        **readability_data,
+    }
+
+
 @router.post("/{scan_id}/copilot", response_model=CopilotResponse)
 def query_compliance_copilot(
     scan_id: str,
@@ -479,6 +519,14 @@ def get_scan_report(
         "summary": scan.compliance_summary or {"verified": 0, "manual_review": 0, "potential_issue": 0, "total_rules": 0},
         "results": scan.compliance_results or [],
     }
+
+    img_quality = readability_service.evaluate_image_quality(scan.file_path)
+    validation_data["readability"] = readability_service.evaluate_declarations_readability(
+        extracted_fields=scan.extracted_fields or {},
+        ocr_lines=scan.ocr_results or [],
+        image_quality=img_quality,
+        is_eligible=not isIneligible,
+    )
 
     try:
         pdf_bytes = report_service.generate_pdf_report(

@@ -180,6 +180,8 @@ export interface ScanDetailResponse {
   ocr_results?: OcrLineItem[] | null;
   extracted_fields?: ExtractedFields | null;
   analysis_error?: string | null;
+  is_eligible?: boolean;
+  eligibility_status?: string | null;
 }
 
 // --- Phase 4: Visual Evidence & Copilot Types ---
@@ -272,5 +274,79 @@ export interface ProcessingStep {
   id: ProcessingStepId;
   label: string;
   description: string;
+}
+
+// --- Readability Assessment Types ---
+
+export interface ImageQualityMetrics {
+  width: number;
+  height: number;
+  megapixels: number;
+  sharpness_score: number;
+  sharpness_label: string;
+  sharpness_rating: 'good' | 'moderate' | 'poor';
+  contrast_score: number;
+  contrast_label: string;
+  contrast_rating: 'good' | 'moderate' | 'poor';
+  overall_quality: string;
+}
+
+export interface DeclarationReadabilityItem {
+  display_name: string;
+  detected: boolean;
+  readability: 'Good' | 'Moderate' | 'Low Readability' | 'Not Detected';
+  text_clarity: string;
+  ocr_confidence: string;
+  pixel_height: number | null;
+  notes: string;
+  recommendation: string;
+}
+
+export interface ReadabilityResponse {
+  success: boolean;
+  scan_id: string;
+  is_eligible: boolean;
+  overall_readability: string;
+  image_quality: ImageQualityMetrics;
+  declarations: Record<string, DeclarationReadabilityItem>;
+  disclaimer: string;
+}
+
+// --- Inspection Dashboard & History Types ---
+
+export interface InspectionHistoryItem {
+  id: string;
+  product_name: string;
+  original_filename: string;
+  created_at: string | null;
+  status: string;
+  compliance_status: string;
+  overall_assessment: string | null;
+  overall_label: string;
+  status_category: 'verified' | 'manual_review' | 'potential_issue' | 'ineligible' | 'uploaded';
+  is_eligible: boolean;
+  summary: {
+    verified: number;
+    manual_review: number;
+    potential_issue: number;
+    total_rules: number;
+  };
+}
+
+export interface DashboardStatsResponse {
+  total_scans: number;
+  eligible_analyses: number;
+  verified_count: number;
+  requires_manual_review: number;
+  potential_issues: number;
+  ineligible_count: number;
+  recent_inspections: InspectionHistoryItem[];
+}
+
+export interface ScanHistoryResponse {
+  total: number;
+  limit: number;
+  offset: number;
+  items: InspectionHistoryItem[];
 }
 

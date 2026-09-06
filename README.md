@@ -185,11 +185,14 @@ Automated test suites:
 * `tests/test_phase3_compliance.py`:
   - Scenario 1 (Strong Detection): All 6 declarations verified -> `INFORMATION_VERIFIED` -> **PASS**.
   - Scenario 2 (Low/Moderate Confidence): Flags items for manual review -> `MANUAL_REVIEW_RECOMMENDED` -> **PASS**.
-  - Scenario 3 (Missing Detection): Non-detected mandatory fields flagged as `POTENTIAL_ISSUE` with careful safety wording -> **PASS**.
-  - Scenario 4 (Invalid Format): Negative MRP & non-metric unit checks -> **PASS**.
+  - Scenario 3 (Missing Detection on Single Panel): Non-detected mandatory fields flagged for `MANUAL_REVIEW` with physical verification guidance -> **PASS**.
+  - Scenario 4 (Invalid Format): True structural defect (negative MRP) flagged as `POTENTIAL_ISSUE`, non-standard unit for `MANUAL_REVIEW` -> **PASS**.
   - Scenario 5 (Full Workflow via Live API): Upload -> Analyze -> Validate -> Query -> **PASS**.
 * `tests/test_phase2_ocr.py`: OCR multi-scenario suite -> **PASS**.
-* Frontend: TypeScript compiled with 0 errors (`tsc -b`), Vite production build completed in 1.9s.
+* `tests/test_phase4_evidence.py`: Bounding box normalization and visual evidence mapping -> **PASS**.
+* `tests/test_phase5_report.py`: Official PDF inspection report generation and styling -> **PASS**.
+* `tests/test_eligibility_and_redesign.py`: Package eligibility gate, zero-hallucination non-package rejection (certificates, institutional documents, random images), and sequential scan isolation -> **PASS**.
+* Frontend: TypeScript compiled with 0 errors (`tsc -b`), Vite production build completed.
 
 ---
 

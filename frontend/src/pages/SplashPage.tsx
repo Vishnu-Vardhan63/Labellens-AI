@@ -5,7 +5,7 @@ export default function SplashPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const timer = setTimeout(() => navigate('/home', { replace: true }), 2200);
+    const timer = setTimeout(() => navigate('/', { replace: true }), 2200);
     return () => clearTimeout(timer);
   }, [navigate]);
 

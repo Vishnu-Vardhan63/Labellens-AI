@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { HomeIcon, MagnifyingGlassIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
-import { HomeIcon as HomeIconSolid, MagnifyingGlassIcon as ScanIconSolid } from '@heroicons/react/24/solid';
+import { Squares2X2Icon, DocumentMagnifyingGlassIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { Squares2X2Icon as DashboardSolid, DocumentMagnifyingGlassIcon as ScanSolid, ClockIcon as HistorySolid } from '@heroicons/react/24/solid';
 
 const navItems = [
-  { to: '/home', label: 'Home', Icon: HomeIcon, ActiveIcon: HomeIconSolid },
-  { to: '/scan', label: 'Scan', Icon: MagnifyingGlassIcon, ActiveIcon: ScanIconSolid },
-  { to: '/about', label: 'About', Icon: InformationCircleIcon, ActiveIcon: InformationCircleIcon },
+  { to: '/', label: 'Dashboard', Icon: Squares2X2Icon, ActiveIcon: DashboardSolid },
+  { to: '/scan', label: 'Scan', Icon: DocumentMagnifyingGlassIcon, ActiveIcon: ScanSolid },
+  { to: '/history', label: 'History', Icon: ClockIcon, ActiveIcon: HistorySolid },
 ];
 
 export function BottomNav() {
