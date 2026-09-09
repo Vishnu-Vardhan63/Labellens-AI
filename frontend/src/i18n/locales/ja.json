@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "scan": "スマートスキャン",
+    "inspector": "検査官ワークスペース",
+    "history": "履歴",
+    "about": "概要",
+    "language": "言語"
+  },
+  "common": {
+    "scanNow": "パッケージをスキャン",
+    "sampleInspection": "サンプル検査を試す",
+    "viewHistory": "検査履歴を表示",
+    "inspect": "検査実行",
+    "downloadPdf": "PDFレポートをダウンロード",
+    "generatingPdf": "レポート作成中...",
+    "retry": "再試行",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "close": "閉じる",
+    "search": "検索",
+    "refresh": "更新",
+    "verified": "検証済み（適合）",
+    "manualReview": "要確認",
+    "potentialIssue": "違反の可能性あり",
+    "notDetected": "未検出",
+    "suspended": "スクリーニング停止中"
+  },
+  "hero": {
+    "badge": "リアルタイム規制インテリジェンス",
+    "title": "自律型法定表示検証＆コンプライアンスプラットフォーム",
+    "subtitle": "法定計量官、コンプライアンス監査人、および意識の高い消費者のためのAI駆動型表示検証システム。",
+    "scanCTA": "パッケージをスキャン",
+    "inspectorCTA": "検査官ワークスペース"
+  },
+  "results": {
+    "header": "パッケージ検証結果",
+    "simpleView": "消費者ビュー",
+    "inspectorView": "検査官ビュー",
+    "pkgInfo": "パッケージ基本情報",
+    "complianceReview": "コンプライアンスレビュー",
+    "confidence": "テキスト読み取り信頼度",
+    "recommendedAction": "推奨される対応",
+    "recommendationDesc": "最終決定を下す前にハイライト表示された表示項目を確認してください。",
+    "mandatoryCheck": "法的必須表示項目のチェック",
+    "mandatorySub": "計量規則第6条に基づく詳細検証",
+    "whereFound": "情報抽出位置とエビデンス",
+    "whereFoundSub": "視覚的バウンディングボックスとOCR原典根拠",
+    "inspectorControls": "検査官用確認・判定コントロール",
+    "foodInfo": "食品情報と消費者の透明性",
+    "ocrNotice": "OCRの原典エビデンスはパッケージの印字通りの原文を表示しています。",
+    "viewInMyLang": "自分の言語でUI解釈を表示"
+  },
+  "scan": {
+    "title": "包装商品スキャン",
+    "subtitle": "AIによる表示解析および法的コンプライアンス検証のために画像をアップロードまたは撮影します。",
+    "startCamera": "ライブカメラを起動",
+    "dropHere": "ここにパッケージ画像をドロップ",
+    "orBrowse": "またはデバイスからファイルを選択",
+    "analyze": "パッケージの解析を開始 →",
+    "howToTitle": "撮影方法のガイド",
+    "panelFront": "前面パネル",
+    "panelBack": "背面/側面パネル",
+    "panelAuto": "自動チェック",
+    "panelReview": "検査官レビュー"
+  },
+  "processing": {
+    "title": "パッケージラベルの解析中",
+    "subtitle": "印刷テキストを抽出し、法的必須表示を検証しています...",
+    "step1": "画像を受信しました",
+    "step2": "印刷テキストを抽出中",
+    "step3": "表示情報を整理中",
+    "step4": "法的表示を検証中",
+    "step5": "結果を準備中"
+  },
+  "dashboard": {
+    "title": "AI支援 包装商品検査ワークスペース",
+    "subtitle": "法定計量官および監査人のための自動表示検証システム。",
+    "overview": "検査の概要",
+    "totalScans": "総検査件数",
+    "verifiedScans": "適合件数",
+    "reviewScans": "要確認件数",
+    "issueScans": "違反疑い件数",
+    "recentInspections": "最近の検査履歴"
+  },
+  "history": {
+    "title": "検査履歴アーカイブ",
+    "subtitle": "データベースに保存された公式監査記録を検索・フィルタリング・レビューします。",
+    "all": "すべての検査",
+    "verified": "適合",
+    "review": "要確認",
+    "issues": "違反疑い",
+    "notAnalyzed": "未解析",
+    "searchPlaceholder": "商品名、スキャンID、またはファイル名で検索..."
+  },
+  "about": {
+    "title": "LABEL LENS AI",
+    "subtitle": "法的計量規則に基づく包装商品の自律検証・コンプライアンス審査プラットフォーム。",
+    "pillarsTitle": "主要エンジニアリングピラー",
+    "workflowTitle": "エンドツーエンドアーキテクチャ",
+    "charterTitle": "法的憲章と適用範囲"
+  }
+}

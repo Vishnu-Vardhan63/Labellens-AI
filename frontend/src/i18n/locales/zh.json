@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "home": "首页",
+    "scan": "智能扫描",
+    "inspector": "检查员工作区",
+    "history": "历史记录",
+    "about": "关于",
+    "language": "语言"
+  },
+  "common": {
+    "scanNow": "扫描商品包装",
+    "sampleInspection": "体验示例检查",
+    "viewHistory": "查看检查历史",
+    "inspect": "检查",
+    "downloadPdf": "下载 PDF 报告",
+    "generatingPdf": "正在生成报告...",
+    "retry": "重试",
+    "save": "保存",
+    "cancel": "取消",
+    "close": "关闭",
+    "search": "搜索",
+    "refresh": "刷新",
+    "verified": "已验证合格",
+    "manualReview": "需要人工复核",
+    "potentialIssue": "潜在违规",
+    "notDetected": "未检测到",
+    "suspended": "检测已暂停"
+  },
+  "hero": {
+    "badge": "实时监管智能平台",
+    "title": "自主法定声明核验与合规审查平台",
+    "subtitle": "面向计量执法官、合规审计员及消费者的高精 AI 包装法定声明合规核验系统。",
+    "scanCTA": "扫描商品包装",
+    "inspectorCTA": "检查员工作区"
+  },
+  "results": {
+    "header": "包装合规核验结果",
+    "simpleView": "消费者视图",
+    "inspectorView": "执法检查员视图",
+    "pkgInfo": "包装基本信息",
+    "complianceReview": "法定合规审查",
+    "confidence": "文本识别置信度",
+    "recommendedAction": "建议处置措施",
+    "recommendationDesc": "在做出最终审核决定前，请核对高亮标注的声明事项。",
+    "mandatoryCheck": "法定强制声明项目核验",
+    "mandatorySub": "基于计量法规第六条的详细合规核验",
+    "whereFound": "信息提取与证据定位",
+    "whereFoundSub": "可视化边界框与 OCR 原始证据溯源",
+    "inspectorControls": "检查员审理与处置控制台",
+    "foodInfo": "食品标签信息与消费者透明度",
+    "ocrNotice": "原始 OCR 证据严格按包装印制文本原文呈现，界面翻译仅供辅助参考。",
+    "viewInMyLang": "以我的语言查看界面解读"
+  },
+  "scan": {
+    "title": "扫描包装商品",
+    "subtitle": "上传或拍摄商品包装版面，以进行 AI 辅助声明分析与计量合规核验。",
+    "startCamera": "启动实时摄像头",
+    "dropHere": "拖拽包装图片至此",
+    "orBrowse": "或从设备浏览选择文件",
+    "analyze": "开始分析包装 →",
+    "howToTitle": "包装拍摄指南",
+    "panelFront": "正面主版面",
+    "panelBack": "背面/侧面版面",
+    "panelAuto": "自动校验",
+    "panelReview": "检查员复核"
+  },
+  "processing": {
+    "title": "正在分析包装标签",
+    "subtitle": "正在提取可见文本并核验法定强制声明...",
+    "step1": "已接收包装图像",
+    "step2": "正在提取可见文本",
+    "step3": "正在整理包装信息",
+    "step4": "正在比对法定声明",
+    "step5": "正在生成核验结果"
+  },
+  "dashboard": {
+    "title": "AI 辅助包装商品检查工作区",
+    "subtitle": "面向法定计量官与合规审计员的自动化合规审查系统。",
+    "overview": "检查工作概览",
+    "totalScans": "总检查次数",
+    "verifiedScans": "合格数量",
+    "reviewScans": "待复核数量",
+    "issueScans": "违规/异常数量",
+    "recentInspections": "近期检查记录"
+  },
+  "history": {
+    "title": "检查历史档案",
+    "subtitle": "检索、筛选并审查数据库中存储的所有官方包装商品审计记录。",
+    "all": "全部检查",
+    "verified": "已合格",
+    "review": "待复核",
+    "issues": "潜在违规",
+    "notAnalyzed": "未分析",
+    "searchPlaceholder": "按商品名称、扫描 ID 或文件名搜索..."
+  },
+  "about": {
+    "title": "LABEL LENS AI",
+    "subtitle": "符合法定计量 (预包装商品) 规程的自主核验与法定合规审查平台。",
+    "pillarsTitle": "核心工程支柱",
+    "workflowTitle": "端到端系统架构",
+    "charterTitle": "法定宪章与法律适用范围"
+  }
+}

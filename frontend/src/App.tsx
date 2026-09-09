@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
 import { BottomNav } from './components/layout/BottomNav';
+import { Footer } from './components/layout/Footer';
 import SplashPage from './pages/SplashPage';
 import DashboardPage from './pages/DashboardPage';
 import HomePage from './pages/HomePage';
@@ -19,14 +20,14 @@ export default function App() {
   const hideChrome = HIDE_CHROME_PATHS.includes(location.pathname);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-[#07111F] text-[#F8FAFC]">
       {!hideChrome && <Navbar />}
       <div className="flex-1">
         <Routes>
-          <Route path="/" element={<DashboardPage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/splash" element={<SplashPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/home" element={<DashboardPage />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/scan" element={<ScanPage />} />
           <Route path="/processing" element={<ProcessingPage />} />
           <Route path="/status" element={<StatusPage />} />
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
+      {!hideChrome && <Footer />}
       {!hideChrome && <BottomNav />}
     </div>
   );

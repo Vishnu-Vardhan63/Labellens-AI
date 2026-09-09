@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "home": "Home",
+    "scan": "Smart Scan",
+    "inspector": "Inspector Workspace",
+    "history": "History",
+    "about": "About",
+    "language": "Language"
+  },
+  "common": {
+    "scanNow": "Scan a Package",
+    "sampleInspection": "Try Sample Inspection",
+    "viewHistory": "View Inspection History",
+    "inspect": "Inspect",
+    "downloadPdf": "Download PDF Report",
+    "generatingPdf": "Generating Report...",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "search": "Search",
+    "refresh": "Refresh",
+    "verified": "Verified",
+    "manualReview": "Requires Review",
+    "potentialIssue": "Potential Issue",
+    "notDetected": "Not Detected",
+    "suspended": "Screening Suspended"
+  },
+  "hero": {
+    "badge": "Real-Time Regulatory Intelligence",
+    "title": "Autonomous Verification & Compliance Platform",
+    "subtitle": "AI-powered statutory declaration verification for Legal Metrology Officers, Compliance Auditors, and Conscious Consumers under Packaged Commodities Rules, 2011.",
+    "scanCTA": "SCAN A PACKAGE",
+    "inspectorCTA": "INSPECTOR WORKSPACE"
+  },
+  "results": {
+    "header": "Package Verification Results",
+    "simpleView": "Consumer View",
+    "inspectorView": "Inspector View",
+    "pkgInfo": "Package Information",
+    "complianceReview": "Compliance Review",
+    "confidence": "Text Reading Confidence",
+    "recommendedAction": "Recommended Action",
+    "recommendationDesc": "Review highlighted declarations before making a final decision.",
+    "mandatoryCheck": "Mandatory Declaration Check",
+    "mandatorySub": "Detailed Legal Metrology verification under Rule 6",
+    "whereFound": "Where We Found the Information",
+    "whereFoundSub": "Visual bounding boxes and grounded OCR evidence",
+    "inspectorControls": "Inspector Triage & Review Controls",
+    "foodInfo": "Food Information & Consumer Transparency",
+    "ocrNotice": "Original OCR evidence is displayed exactly as printed on package. UI interpretation translated for convenience.",
+    "viewInMyLang": "View UI Interpretation in My Language"
+  },
+  "scan": {
+    "title": "Scan a Packaged Commodity",
+    "subtitle": "Upload or capture package panels for AI-assisted declaration analysis and Legal Metrology compliance verification.",
+    "startCamera": "START LIVE CAMERA",
+    "dropHere": "Drop package image here",
+    "orBrowse": "or browse files from your device",
+    "analyze": "ANALYZE PACKAGE →",
+    "howToTitle": "How to Capture a Package",
+    "panelFront": "Front Panel",
+    "panelBack": "Back / Side Panel",
+    "panelAuto": "Automated Check",
+    "panelReview": "Inspector Review"
+  },
+  "processing": {
+    "title": "Analyzing Package Label",
+    "subtitle": "Extracting visible package text and checking mandatory declarations.",
+    "step1": "Package received",
+    "step2": "Extracting visible text",
+    "step3": "Organizing package information",
+    "step4": "Checking declarations",
+    "step5": "Preparing results"
+  },
+  "dashboard": {
+    "title": "AI-Assisted Packaged Commodity Inspection",
+    "subtitle": "Automated statutory declaration screening for Legal Metrology officers and compliance auditors.",
+    "overview": "Inspection Overview",
+    "totalScans": "Total Inspections",
+    "verifiedScans": "Verified",
+    "reviewScans": "Requires Review",
+    "issueScans": "Potential Issues",
+    "recentInspections": "Recent Inspections"
+  },
+  "history": {
+    "title": "Inspection History",
+    "subtitle": "Search, filter, and review all official packaged commodity audits stored in the database.",
+    "all": "All Inspections",
+    "verified": "Verified",
+    "review": "Requires Review",
+    "issues": "Potential Issue",
+    "notAnalyzed": "Not Analyzed",
+    "searchPlaceholder": "Search by product name, scan ID, or file..."
+  },
+  "about": {
+    "title": "LABEL LENS AI",
+    "subtitle": "Autonomous verification and statutory compliance screening for packaged commodities under the Legal Metrology (Packaged Commodities) Rules, 2011.",
+    "pillarsTitle": "Core Engineering Pillars",
+    "workflowTitle": "End-to-End Architecture",
+    "charterTitle": "Statutory Charter & Legal Scope"
+  }
+}

@@ -1,19 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #163A5F;
-  --color-primary-light: #1f4f82;
-  --color-accent: #2563EB;
-  --color-accent-hover: #1d4ed8;
-  --color-success: #16A34A;
-  --color-warning: #D97706;
-  --color-error: #DC2626;
-  --color-surface: #FFFFFF;
-  --color-bg: #F5F7FA;
-  --color-border: #E2E8F0;
-  --color-text-primary: #172033;
-  --color-text-secondary: #667085;
-  --font-family-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --color-dark-bg: #07111F;
+  --color-dark-navy: #0B1F3A;
+  --color-dark-surface: #10263F;
+  --color-dark-elevated: #16324F;
+  --color-primary: #2563EB;
+  --color-accent-light: #38BDF8;
+  --color-ai-green: #22C55E;
+  --color-orange-accent: #F97316;
+  --color-text-main: #F8FAFC;
+  --color-text-sub: #94A3B8;
+  --font-family-sans: "Inter", "Noto Sans", "Noto Sans Devanagari", "Noto Sans Telugu", "Noto Sans Tamil", "Noto Sans Kannada", "Noto Sans Malayalam", "Noto Sans Bengali", "Noto Sans SC", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-family-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
@@ -25,17 +23,36 @@ html {
   font-family: var(--font-family-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  background-color: #07111F;
+  color: #F8FAFC;
 }
 
 body {
   margin: 0;
-  background-color: #F5F7FA;
-  color: #172033;
+  background-color: #07111F;
+  color: #F8FAFC;
   min-height: 100vh;
 }
 
 /* Clear, accessible focus rings */
 :focus-visible {
-  outline: 2px solid #2563EB;
+  outline: 2px solid #38BDF8;
   outline-offset: 2px;
+}
+
+/* Custom scrollbar for dark tech theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #07111F;
+}
+::-webkit-scrollbar-thumb {
+  background: #16324F;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2563EB;
 }

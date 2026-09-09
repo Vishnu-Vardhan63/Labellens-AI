@@ -96,32 +96,32 @@ export function CopilotWidget({ scanId, onHighlightField }: CopilotWidgetProps) 
   };
 
   return (
-    <div className="rounded-xl border border-[#E5EAF0] bg-white shadow-2xs overflow-hidden">
+    <div className="rounded-2xl border border-white/10 bg-[#0B1F3A]/90 backdrop-blur-xl shadow-xl overflow-hidden text-slate-100">
       {/* Widget Header */}
-      <div className="px-5 py-3 border-b border-[#E5EAF0] flex items-center justify-between bg-[#F8F9FA]">
+      <div className="px-5 py-3 border-b border-white/10 flex items-center justify-between bg-[#10263F]">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-[#163A5F] flex items-center justify-center text-white text-xs font-bold">
-            <SparklesIcon className="w-4 h-4" />
+          <div className="w-8 h-8 rounded-xl bg-[#2563EB]/20 text-[#38BDF8] flex items-center justify-center border border-blue-400/30 text-xs font-bold">
+            <SparklesIcon className="w-4.5 h-4.5 text-[#38BDF8]" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-[#172033] tracking-tight">
+            <h3 className="text-sm font-bold text-white tracking-tight">
               Inspection Assistant
             </h3>
-            <p className="text-[11px] text-[#667085]">
+            <p className="text-[11px] text-slate-400">
               Grounded package screening analysis · Zero hallucination
             </p>
           </div>
         </div>
 
-        <div className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md flex items-center gap-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+        <div className="text-[10px] font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
           <span>Grounded</span>
         </div>
       </div>
 
       {/* Suggested Quick Inquiry Chips */}
-      <div className="px-4 py-2.5 bg-white border-b border-[#E5EAF0] flex items-center gap-1.5 overflow-x-auto text-xs no-scrollbar">
-        <span className="text-[10px] text-[#667085] font-semibold uppercase tracking-wider whitespace-nowrap mr-1">
+      <div className="px-4 py-2.5 bg-[#07111F]/80 border-b border-white/10 flex items-center gap-2 overflow-x-auto text-xs no-scrollbar">
+        <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider whitespace-nowrap mr-1">
           Quick Actions:
         </span>
         {PRESET_CHIPS.map(chip => (
@@ -130,7 +130,7 @@ export function CopilotWidget({ scanId, onHighlightField }: CopilotWidgetProps) 
             type="button"
             disabled={isLoading}
             onClick={() => handleSend({ intent: chip.intent, displayQuestion: chip.label })}
-            className="px-2.5 py-1 rounded-md border border-[#E5EAF0] bg-[#F8F9FA] hover:bg-[#EFF6FF] hover:border-[#BFDBFE] text-[#163A5F] font-medium text-xs whitespace-nowrap cursor-pointer transition disabled:opacity-50"
+            className="px-3 py-1 rounded-xl border border-white/10 bg-[#10263F] hover:bg-[#16324F] hover:border-[#38BDF8] text-slate-200 hover:text-white font-semibold text-xs whitespace-nowrap cursor-pointer transition disabled:opacity-50"
           >
             {chip.label}
           </button>
@@ -138,7 +138,7 @@ export function CopilotWidget({ scanId, onHighlightField }: CopilotWidgetProps) 
       </div>
 
       {/* Conversation Thread */}
-      <div className="p-4 space-y-3.5 max-h-[320px] overflow-y-auto text-xs">
+      <div className="p-4 space-y-3.5 max-h-[320px] overflow-y-auto text-xs bg-[#07111F]/40">
         {messages.map(m => (
           <div
             key={m.id}
@@ -147,16 +147,16 @@ export function CopilotWidget({ scanId, onHighlightField }: CopilotWidgetProps) 
             <div
               className={`max-w-[88%] p-3.5 rounded-2xl leading-relaxed whitespace-pre-wrap ${
                 m.sender === 'user'
-                  ? 'bg-accent text-white rounded-br-xs shadow-xs font-medium'
-                  : 'bg-white border border-slate-200 text-slate-800 rounded-bl-xs shadow-xs'
+                  ? 'bg-[#2563EB] text-white rounded-br-xs shadow-md font-medium'
+                  : 'bg-[#10263F] border border-white/10 text-slate-200 rounded-bl-xs shadow-md'
               }`}
             >
               {m.text}
 
               {/* Actionable Visual Evidence Links */}
               {m.sender === 'assistant' && m.evidenceFields && m.evidenceFields.length > 0 && (
-                <div className="mt-3 pt-2.5 border-t border-slate-100 flex flex-wrap gap-1.5">
-                  <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider block w-full">
+                <div className="mt-3 pt-2.5 border-t border-white/10 flex flex-wrap gap-1.5">
+                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block w-full">
                     Visual Evidence Shortcuts:
                   </span>
                   {m.evidenceFields.map(fKey => (
@@ -164,22 +164,22 @@ export function CopilotWidget({ scanId, onHighlightField }: CopilotWidgetProps) 
                       key={fKey}
                       type="button"
                       onClick={() => onHighlightField(fKey)}
-                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 hover:bg-blue-100 text-accent font-medium text-[11px] border border-blue-200 cursor-pointer transition-colors"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#2563EB]/20 hover:bg-[#2563EB]/40 text-[#38BDF8] font-bold text-[11px] border border-blue-400/30 cursor-pointer transition-colors"
                     >
-                      <MagnifyingGlassIcon className="w-3 h-3" />
+                      <MagnifyingGlassIcon className="w-3 h-3 text-[#38BDF8]" />
                       <span>Highlight {fieldDisplayNames[fKey] || fKey}</span>
                     </button>
                   ))}
                 </div>
               )}
             </div>
-            <span className="text-[10px] text-slate-400 mt-1 px-1">{m.timestamp}</span>
+            <span className="text-[10px] text-slate-500 mt-1 px-1">{m.timestamp}</span>
           </div>
         ))}
 
         {isLoading && (
-          <div className="flex items-center gap-2 text-xs text-text-secondary italic p-2 bg-white/60 rounded-xl border border-slate-200 max-w-[200px]">
-            <ArrowPathIcon className="w-3.5 h-3.5 animate-spin text-accent" />
+          <div className="flex items-center gap-2 text-xs text-slate-300 italic p-2.5 bg-[#10263F] rounded-xl border border-white/10 max-w-[220px]">
+            <ArrowPathIcon className="w-3.5 h-3.5 animate-spin text-[#38BDF8]" />
             <span>Consulting package data...</span>
           </div>
         )}
@@ -193,7 +193,7 @@ export function CopilotWidget({ scanId, onHighlightField }: CopilotWidgetProps) 
             handleSend({ query: inputText, displayQuestion: inputText });
           }
         }}
-        className="p-3 border-t border-border bg-white flex items-center gap-2"
+        className="p-3 border-t border-white/10 bg-[#10263F] flex items-center gap-2"
       >
         <input
           type="text"
@@ -201,12 +201,12 @@ export function CopilotWidget({ scanId, onHighlightField }: CopilotWidgetProps) 
           onChange={e => setInputText(e.target.value)}
           placeholder="Ask a question about this package (e.g. What is the MRP?)..."
           disabled={isLoading}
-          className="flex-1 px-3.5 py-2 text-xs bg-surface rounded-xl border border-border focus:outline-hidden focus:border-accent"
+          className="flex-1 px-3.5 py-2.5 text-xs bg-[#07111F] text-white rounded-xl border border-white/10 focus:outline-none focus:border-[#38BDF8] placeholder-slate-500"
         />
         <button
           type="submit"
           disabled={isLoading || !inputText.trim()}
-          className="p-2 bg-accent text-white rounded-xl hover:bg-accent-hover disabled:opacity-40 transition-colors cursor-pointer"
+          className="p-2.5 bg-[#2563EB] text-white rounded-xl hover:bg-[#1d4ed8] disabled:opacity-40 transition-colors cursor-pointer shadow-md"
           title="Send query to Copilot"
         >
           <PaperAirplaneIcon className="w-4 h-4" />
