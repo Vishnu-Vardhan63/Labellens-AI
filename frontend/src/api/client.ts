@@ -21,6 +21,14 @@ function resolveApiBase(): string {
     // Android emulator host alias
     return 'http://10.0.2.2:8000';
   }
+  // Production safeguard: DO NOT silently fall back to localhost in production builds
+  if (import.meta.env.PROD) {
+    console.error(
+      'CRITICAL DEPLOYMENT WARNING: VITE_API_BASE_URL is missing in production environment. ' +
+      'Please configure VITE_API_BASE_URL in Vercel Project Settings and redeploy.'
+    );
+    return '';
+  }
   // Safe local development fallback
   return 'http://127.0.0.1:8000';
 }

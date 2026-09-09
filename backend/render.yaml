@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: label-lens-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: CORS_ORIGINS
+        value: https://labellens-ai-theta.vercel.app,http://localhost:5173
+      - key: UPLOAD_DIR
+        value: ./uploads
+      - key: DATABASE_URL
+        value: sqlite:///./label_lens.db
