@@ -13,7 +13,7 @@ import type {
 
 function resolveApiBase(): string {
   const envBaseUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL;
-  if (envBaseUrl && envBaseUrl.trim() !== '') {
+  if (envBaseUrl && envBaseUrl.trim() !== '' && !envBaseUrl.includes('VITE_API_BASE_URL')) {
     return envBaseUrl.trim().replace(/\/+$/, '');
   }
   // Check if running inside Capacitor native container on Android
@@ -21,16 +21,14 @@ function resolveApiBase(): string {
     // Android emulator host alias
     return 'http://10.0.2.2:8000';
   }
-  // Production safeguard: DO NOT silently fall back to localhost in production builds
-  if (import.meta.env.PROD) {
-    console.error(
-      'CRITICAL DEPLOYMENT WARNING: VITE_API_BASE_URL is missing in production environment. ' +
-      'Please configure VITE_API_BASE_URL in Vercel Project Settings and redeploy.'
-    );
-    return '';
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return 'http://127.0.0.1:8000';
+    }
   }
-  // Safe local development fallback
-  return 'http://127.0.0.1:8000';
+  // Production fallback to live FastAPI backend on Render
+  return 'https://labellens-ai.onrender.com';
 }
 
 export const API_BASE = resolveApiBase();
