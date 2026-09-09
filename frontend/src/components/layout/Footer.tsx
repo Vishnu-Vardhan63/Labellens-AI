@@ -47,7 +47,7 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-2 font-mono text-slate-500 shrink-0">
             <ShieldCheckIcon className="w-4 h-4 text-[#38BDF8]" />
-            <span>Smart India Hackathon 2024</span>
+            <span>Smart India Hackathon 2026</span>
           </div>
         </div>
       </div>

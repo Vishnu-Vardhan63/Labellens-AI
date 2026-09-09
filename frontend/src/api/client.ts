@@ -12,16 +12,17 @@ import type {
 } from '../types';
 
 function resolveApiBase(): string {
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL.replace(/\/+$/, '');
+  const envBaseUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL;
+  if (envBaseUrl && envBaseUrl.trim() !== '') {
+    return envBaseUrl.trim().replace(/\/+$/, '');
   }
   // Check if running inside Capacitor native container on Android
   if (typeof window !== 'undefined' && (window as any).Capacitor?.isNativePlatform?.()) {
     // Android emulator host alias
     return 'http://10.0.2.2:8000';
   }
-  // Standard browser runtime: empty string uses relative URLs via Vite proxy or same-origin
-  return '';
+  // Safe local development fallback
+  return 'http://127.0.0.1:8000';
 }
 
 export const API_BASE = resolveApiBase();
@@ -139,6 +140,10 @@ export async function downloadReport(scanId: string): Promise<Blob> {
 
 export function getScanReportUrl(scanId: string): string {
   return `${API_BASE}/api/scans/${scanId}/report`;
+}
+
+export function getScanImageUrl(scanId: string): string {
+  return `${API_BASE}/api/scans/${scanId}/image`;
 }
 
 export async function getScanReadability(scanId: string): Promise<ReadabilityResponse> {

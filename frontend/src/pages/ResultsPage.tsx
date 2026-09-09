@@ -32,6 +32,7 @@ import {
   getScanReadability,
   getScanDetail,
   submitInspectorReview,
+  getScanImageUrl,
 } from '../api/client';
 import { EvidenceImageViewer } from '../components/evidence/EvidenceImageViewer';
 import { CopilotWidget } from '../components/copilot/CopilotWidget';
@@ -409,7 +410,7 @@ export default function ResultsPage() {
 
   const fields: ExtractedFields = analysisData?.extracted_fields || ({} as ExtractedFields);
   const preview = state?.preview;
-  const imageSrc = preview || (scanId ? `/api/scans/${scanId}/image` : null);
+  const imageSrc = preview || (scanId ? getScanImageUrl(scanId) : null);
 
   const isEligible =
     validationData?.is_eligible !== false &&

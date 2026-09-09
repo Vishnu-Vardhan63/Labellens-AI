@@ -223,7 +223,7 @@ export default function AboutPage() {
 
         {/* SIH Presentation Footer Info */}
         <div className="p-5 rounded-2xl bg-[#0B1F3A]/80 backdrop-blur-xl border border-white/10 text-center text-xs text-slate-400 shadow-xl">
-          <span className="font-extrabold text-[#38BDF8]">Smart India Hackathon 2024 · Ministry of Consumer Affairs, Food & Public Distribution</span>
+          <span className="font-extrabold text-[#38BDF8]">Smart India Hackathon 2026 · Ministry of Consumer Affairs, Food & Public Distribution</span>
           <p className="mt-1 text-[11px] text-slate-300">Department of Consumer Affairs · Legal Metrology Division</p>
         </div>
       </div>
