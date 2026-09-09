@@ -1,0 +1,11 @@
+# Ignore backend and non-frontend files for Vercel Frontend deployment
+backend/
+docs/
+uploads/
+*.db
+*.md
+DEPLOYMENT_GUIDE.md
+FINAL_ARCHITECTURE.md
+RELEASE_CHECKLIST.md
+SECURITY_NOTES.md
+SIH_*
