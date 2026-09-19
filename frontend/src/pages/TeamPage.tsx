@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { UserIcon, CameraIcon, CodeBracketIcon } from '@heroicons/react/24/outline';
+import { CameraIcon, CodeBracketIcon } from '@heroicons/react/24/outline';
 
 const TEAM_MEMBERS = [
   {
@@ -58,13 +58,13 @@ export default function TeamPage() {
         {/* Header */}
         <div className="text-center space-y-3 pb-8 border-b border-[#16324F]">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-md text-xs font-semibold bg-[#10263F] text-[#38BDF8] border border-[#16324F]">
-            <span>SIH 2026 ENGINEERING TEAM</span>
+            <span>{t('team.badge', 'SIH 2026 ENGINEERING TEAM')}</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-            THE TEAM
+            {t('team.title', 'THE TEAM')}
           </h1>
           <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Built by students combining AI, software engineering, and statutory problem solving for Legal Metrology package compliance.
+            {t('team.subtitle', 'Built by students combining AI, software engineering, and statutory problem solving for Legal Metrology package compliance.')}
           </p>
         </div>
 
@@ -92,7 +92,7 @@ export default function TeamPage() {
 
                 <div className="pt-2 border-t border-[#16324F]">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-                    Key Contribution
+                    {t('team.keyContribution', 'Key Contribution')}
                   </span>
                   <p className="text-xs text-slate-300 leading-relaxed">
                     {member.contribution}
@@ -103,7 +103,7 @@ export default function TeamPage() {
               <div className="pt-2">
                 <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-slate-400 bg-[#10263F] px-2.5 py-1 rounded border border-[#16324F]">
                   <CodeBracketIcon className="w-3 h-3 text-[#38BDF8]" />
-                  <span>Student Contributor</span>
+                  <span>{t('team.studentRole', 'Student Contributor')}</span>
                 </span>
               </div>
             </div>
@@ -113,17 +113,17 @@ export default function TeamPage() {
         {/* Project Callout */}
         <div className="bg-[#0B1F3A] border border-[#16324F] rounded-lg p-6 text-center space-y-4">
           <h3 className="text-base font-bold text-white">
-            LabelLens AI — Smart India Hackathon 2026
+            {t('team.calloutTitle', 'LabelLens AI — Smart India Hackathon 2026')}
           </h3>
           <p className="text-xs text-slate-300 max-w-xl mx-auto leading-relaxed">
-            Engineered to automate Statutory Packaged Commodity screening under the Legal Metrology (Packaged Commodities) Rules, 2011.
+            {t('team.calloutDesc', 'Engineered to automate Statutory Packaged Commodity screening under the Legal Metrology (Packaged Commodities) Rules, 2011.')}
           </p>
           <button
             onClick={() => navigate('/scan')}
             className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-xs font-bold text-white bg-[#2563EB] hover:bg-[#1d4ed8] transition cursor-pointer"
           >
             <CameraIcon className="w-4 h-4" />
-            <span>START A PACKAGE INSPECTION</span>
+            <span>{t('team.startScanBtn', 'START A PACKAGE INSPECTION')}</span>
           </button>
         </div>
       </div>

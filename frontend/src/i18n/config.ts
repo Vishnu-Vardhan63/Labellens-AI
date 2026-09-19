@@ -10,8 +10,8 @@ import kn from './locales/kn.json';
 import ml from './locales/ml.json';
 import mr from './locales/mr.json';
 import bn from './locales/bn.json';
-import zh from './locales/zh.json';
-import ja from './locales/ja.json';
+import gu from './locales/gu.json';
+import pa from './locales/pa.json';
 
 export interface LanguageOption {
   code: string;
@@ -22,15 +22,15 @@ export interface LanguageOption {
 
 export const SUPPORTED_LANGUAGES: LanguageOption[] = [
   { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧' },
-  { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी', flag: '🇮🇳' },
   { code: 'te', name: 'Telugu', nativeName: 'తెలుగు', flag: '🇮🇳' },
+  { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी', flag: '🇮🇳' },
   { code: 'ta', name: 'Tamil', nativeName: 'தமிழ்', flag: '🇮🇳' },
   { code: 'kn', name: 'Kannada', nativeName: 'ಕನ್ನಡ', flag: '🇮🇳' },
   { code: 'ml', name: 'Malayalam', nativeName: 'മലയാളം', flag: '🇮🇳' },
-  { code: 'mr', name: 'Marathi', nativeName: 'मराठी', flag: '🇮🇳' },
   { code: 'bn', name: 'Bengali', nativeName: 'বাংলা', flag: '🇮🇳' },
-  { code: 'zh', name: 'Chinese', nativeName: '中文', flag: '🇨🇳' },
-  { code: 'ja', name: 'Japanese', nativeName: '日本語', flag: '🇯🇵' },
+  { code: 'mr', name: 'Marathi', nativeName: 'मराठी', flag: '🇮🇳' },
+  { code: 'gu', name: 'Gujarati', nativeName: 'ગુજરાતી', flag: '🇮🇳' },
+  { code: 'pa', name: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ', flag: '🇮🇳' },
 ];
 
 const resources = {
@@ -42,8 +42,8 @@ const resources = {
   ml: { translation: ml },
   mr: { translation: mr },
   bn: { translation: bn },
-  zh: { translation: zh },
-  ja: { translation: ja },
+  gu: { translation: gu },
+  pa: { translation: pa },
 };
 
 i18n

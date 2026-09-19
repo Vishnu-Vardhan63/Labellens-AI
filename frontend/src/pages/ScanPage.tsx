@@ -8,14 +8,10 @@ import {
   ArrowPathIcon,
   CheckCircleIcon,
   ShieldCheckIcon,
-  PhotoIcon,
   InformationCircleIcon,
   SparklesIcon,
   DocumentMagnifyingGlassIcon,
-  PlayIcon,
-  FilmIcon,
 } from '@heroicons/react/24/outline';
-import { Button } from '../components/ui/Button';
 import { validateImageFile, formatFileSize } from '../utils/fileValidation';
 import { uploadImage } from '../api/client';
 import { LiveCamera } from '../components/camera/LiveCamera';
@@ -48,8 +44,8 @@ export default function ScanPage() {
     if (mode === 'camera') {
       setShowLiveCamera(true);
     } else if (mode === 'upload') {
-      const t = setTimeout(() => fileInputRef.current?.click(), 150);
-      return () => clearTimeout(t);
+      const timeout = setTimeout(() => fileInputRef.current?.click(), 150);
+      return () => clearTimeout(timeout);
     }
   }, [searchParams]);
 
@@ -136,7 +132,7 @@ export default function ScanPage() {
   const isUploading = state.status === 'uploading';
 
   return (
-    <div className="min-h-screen bg-[#07111F] text-slate-100 py-10 sm:py-14">
+    <div className="min-h-screen bg-[#07111F] text-slate-100 py-10 sm:py-14 font-sans">
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
         {/* Centered Header */}
         <div className="text-center mb-8">
@@ -177,14 +173,14 @@ export default function ScanPage() {
             <div className="bg-[#0B1F3A]/70 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-xl mb-6">
               <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#38BDF8] mb-3.5 flex items-center gap-2">
                 <DocumentMagnifyingGlassIcon className="w-4 h-4 text-[#38BDF8]" />
-                <span>How to Capture a Package</span>
+                <span>{t('scan.howToTitle', 'How to Capture a Package')}</span>
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
                 <div className="p-3 bg-[#10263F]/80 border border-white/10 rounded-xl">
                   <span className="w-5 h-5 rounded-full bg-[#2563EB] text-white flex items-center justify-center text-[10px] font-bold mb-1.5">
                     1
                   </span>
-                  <p className="font-bold text-white mb-0.5">Front Panel</p>
+                  <p className="font-bold text-white mb-0.5">{t('scan.frontPanel', 'Front Panel')}</p>
                   <p className="text-[11px] text-slate-400 leading-normal">
                     Brand, product name, and net quantity declarations.
                   </p>
@@ -193,7 +189,7 @@ export default function ScanPage() {
                   <span className="w-5 h-5 rounded-full bg-[#2563EB] text-white flex items-center justify-center text-[10px] font-bold mb-1.5">
                     2
                   </span>
-                  <p className="font-bold text-white mb-0.5">Back / Side Panel</p>
+                  <p className="font-bold text-white mb-0.5">{t('scan.backPanel', 'Back / Side Panel')}</p>
                   <p className="text-[11px] text-slate-400 leading-normal">
                     MRP, Mfg date, packer details, and consumer care info.
                   </p>
@@ -237,7 +233,7 @@ export default function ScanPage() {
                       className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl text-sm font-extrabold text-white bg-[#2563EB] hover:bg-[#1d4ed8] active:bg-[#1e40af] shadow-lg shadow-blue-500/25 transition transform hover:scale-[1.02] cursor-pointer"
                     >
                       <CameraIcon className="w-5 h-5" />
-                      <span>📷 START LIVE CAMERA</span>
+                      <span>📷 {t('scan.startCamera', 'START LIVE CAMERA')}</span>
                     </button>
                   </div>
 
@@ -269,10 +265,10 @@ export default function ScanPage() {
                       <ArrowUpTrayIcon className="w-6 h-6 text-[#38BDF8]" />
                     </div>
                     <h3 className="text-sm font-bold text-white mb-1">
-                      Drop package image here
+                      {t('scan.dropHere', 'Drop package image here')}
                     </h3>
                     <p className="text-xs text-slate-400 mb-3">
-                      or <span className="text-[#38BDF8] font-semibold underline">browse files</span> from your device
+                      {t('scan.orBrowse', 'or browse files from your device')}
                     </p>
 
                     <div className="flex items-center gap-3 text-[11px] text-slate-400 font-mono">
@@ -330,7 +326,7 @@ export default function ScanPage() {
                       className="text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer ml-3"
                     >
                       <ArrowPathIcon className="w-3.5 h-3.5 text-[#38BDF8]" />
-                      <span>Replace</span>
+                      <span>{t('scan.removeImage', 'Remove Image')}</span>
                     </button>
                   </div>
 
@@ -344,10 +340,10 @@ export default function ScanPage() {
                     {isUploading ? (
                       <>
                         <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>Uploading Package Image...</span>
+                        <span>{t('scan.analyzing', 'Analyzing Package...')}</span>
                       </>
                     ) : (
-                      <span>ANALYZE PACKAGE →</span>
+                      <span>{t('scan.analyze', 'ANALYZE PACKAGE →')}</span>
                     )}
                   </button>
                 </div>
@@ -362,7 +358,7 @@ export default function ScanPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-300">
                 <div className="flex items-start gap-2.5 p-3 rounded-xl bg-[#10263F]/80 border border-white/5">
                   <CheckCircleIcon className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Capture the physical package label clearly under good lighting.</span>
+                  <span>{t('scan.tipLighting', 'Ensure clear lighting and readable text on label.')}</span>
                 </div>
                 <div className="flex items-start gap-2.5 p-3 rounded-xl bg-[#10263F]/80 border border-white/5">
                   <CheckCircleIcon className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
