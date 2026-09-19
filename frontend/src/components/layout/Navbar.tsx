@@ -10,11 +10,14 @@ import {
   Squares2X2Icon,
   QuestionMarkCircleIcon,
   GlobeAltIcon,
+  Bars3Icon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
 
 export function Navbar() {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, i18n } = useTranslation();
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -25,11 +28,7 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -44,6 +43,7 @@ export function Navbar() {
       } else {
         window.location.hash = hash;
       }
+      setMobileMenuOpen(false);
     }
   };
 
@@ -58,37 +58,37 @@ export function Navbar() {
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-[#07111F]/90 backdrop-blur-md border-b border-[#16324F] shadow-lg'
-          : 'bg-[#07111F] border-b border-[#0B1F3A]'
+          ? 'bg-[#07111F]/95 backdrop-blur-md border-b border-[#16324F] shadow-xl'
+          : 'bg-[#07111F] border-b border-[#16324F]'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Left: Brand Logo & Title */}
-        <Link to="/" className="flex items-center gap-3 no-underline group" aria-label="Label Lens AI home">
-          <div className="bg-white rounded-lg p-1 shadow-sm border border-white/20 flex items-center justify-center h-9 overflow-hidden transition-transform group-hover:scale-105">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-[72px] flex items-center justify-between gap-4">
+        {/* LEFT: Brand Logo & Title */}
+        <Link to="/" className="flex items-center gap-3 no-underline group shrink-0" aria-label="LabelLens AI Home">
+          <div className="bg-white/95 rounded-lg p-1 border border-white/20 flex items-center justify-center h-9 w-9 overflow-hidden transition-transform group-hover:scale-105 shadow-sm">
             <img
               src="/logo.png"
               alt="LabelLens AI Logo"
-              className="h-full w-auto object-contain"
+              className="h-full w-full object-contain"
             />
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-extrabold tracking-tight text-[#F8FAFC]">
+              <span className="text-sm font-black tracking-tight text-white group-hover:text-[#38BDF8] transition-colors">
                 LABEL LENS AI
               </span>
               <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#2563EB]/20 text-[#38BDF8] border border-[#38BDF8]/30">
-                GOV-READY
+                RULE 6 SCREENING
               </span>
             </div>
-            <span className="text-[11px] font-medium text-[#94A3B8] tracking-tight">
+            <span className="text-[10px] font-medium text-[#94A3B8] tracking-tight">
               AI-Assisted Package Intelligence
             </span>
           </div>
         </Link>
 
-        {/* Center Navigation */}
-        <nav className="hidden md:flex items-center gap-1" aria-label="Primary navigation">
+        {/* CENTER: Navigation Links (Desktop) */}
+        <nav className="hidden md:flex items-center gap-1.5" aria-label="Primary navigation">
           {navLinks.map(({ to, label, icon: Icon, isHash, hash }) => {
             const isActive =
               !isHash && to === '/'
@@ -101,10 +101,10 @@ export function Navbar() {
                 to={to}
                 onClick={isHash && hash ? (e) => handleScrollToHash(e, hash) : undefined}
                 className={[
-                  'relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all no-underline cursor-pointer',
+                  'relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all no-underline cursor-pointer',
                   isActive
-                    ? 'text-[#F8FAFC] bg-[#16324F] font-semibold'
-                    : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[#10263F]',
+                    ? 'text-white bg-[#10263F] border border-[#16324F]'
+                    : 'text-[#94A3B8] hover:text-white hover:bg-[#10263F]/60',
                 ].join(' ')}
               >
                 <Icon className={`w-4 h-4 ${isActive ? 'text-[#38BDF8]' : 'text-[#94A3B8]'}`} aria-hidden />
@@ -120,42 +120,84 @@ export function Navbar() {
           })}
         </nav>
 
-        {/* Right: Secondary & Primary Actions + Global Language Switcher */}
+        {/* RIGHT: Language, Inspector Workspace & Scan CTA */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Global Multilingual Selector */}
+          {/* Compact Language Selector */}
           <div className="relative flex items-center">
-            <GlobeAltIcon className="w-4 h-4 text-[#38BDF8] absolute left-2.5 pointer-events-none z-10" />
+            <GlobeAltIcon className="w-3.5 h-3.5 text-[#38BDF8] absolute left-2.5 pointer-events-none z-10" />
             <select
               value={i18n.language}
               onChange={handleLanguageChange}
               aria-label="Select Language"
-              className="bg-[#10263F] text-[#F8FAFC] text-xs font-medium pl-8 pr-3 py-1.5 rounded-lg border border-[#16324F] hover:border-[#38BDF8]/50 focus:border-[#38BDF8] focus:outline-none cursor-pointer transition appearance-none"
+              className="bg-[#10263F] text-[#F8FAFC] text-xs font-medium pl-7 pr-2.5 py-2 rounded-lg border border-[#16324F] hover:border-[#38BDF8]/40 focus:border-[#38BDF8] focus:outline-none cursor-pointer transition appearance-none"
             >
               {SUPPORTED_LANGUAGES.map((lang) => (
                 <option key={lang.code} value={lang.code} className="bg-[#0B1F3A] text-white py-1">
-                  {lang.flag} {lang.nativeName} ({lang.name})
+                  {lang.flag} {lang.name}
                 </option>
               ))}
             </select>
           </div>
 
+          {/* Secondary CTA: Inspector Workspace */}
           <Link
             to="/dashboard"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-[#F8FAFC] bg-[#10263F] hover:bg-[#16324F] border border-[#16324F] transition cursor-pointer"
+            className="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-[#F8FAFC] bg-[#10263F] hover:bg-[#16324F] border border-[#16324F] transition cursor-pointer shrink-0"
           >
             <Squares2X2Icon className="w-4 h-4 text-[#38BDF8]" />
-            <span>{t('nav.inspector', 'Inspector Workspace')}</span>
+            <span>Inspector Workspace</span>
           </Link>
 
+          {/* Primary CTA: Scan a Package */}
           <Link
             to="/scan"
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold text-white bg-[#2563EB] hover:bg-[#1d4ed8] active:bg-[#1e40af] shadow-xs transition no-underline cursor-pointer tracking-wider"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-extrabold text-white bg-[#2563EB] hover:bg-[#1d4ed8] active:bg-[#1e40af] shadow-md shadow-blue-500/20 transition no-underline cursor-pointer shrink-0"
           >
             <CameraIcon className="w-4 h-4" aria-hidden />
-            <span>📷 {t('hero.scanCTA', 'SCAN A PACKAGE')}</span>
+            <span>SCAN A PACKAGE</span>
           </Link>
+
+          {/* Mobile Menu Toggle Button */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-[#10263F] transition cursor-pointer"
+            aria-label="Toggle mobile menu"
+          >
+            {mobileMenuOpen ? <XMarkIcon className="w-5 h-5" /> : <Bars3Icon className="w-5 h-5" />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-[#07111F] border-b border-[#16324F] px-4 py-3 space-y-2 shadow-2xl">
+          <nav className="flex flex-col space-y-1">
+            {navLinks.map(({ to, label, icon: Icon, isHash, hash }) => (
+              <Link
+                key={label}
+                to={to}
+                onClick={(e) => {
+                  if (isHash && hash) handleScrollToHash(e, hash);
+                  else setMobileMenuOpen(false);
+                }}
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-slate-200 hover:bg-[#10263F] transition"
+              >
+                <Icon className="w-4 h-4 text-[#38BDF8]" />
+                <span>{label}</span>
+              </Link>
+            ))}
+            <Link
+              to="/dashboard"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-slate-200 hover:bg-[#10263F] transition"
+            >
+              <Squares2X2Icon className="w-4 h-4 text-[#38BDF8]" />
+              <span>Inspector Workspace</span>
+            </Link>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
