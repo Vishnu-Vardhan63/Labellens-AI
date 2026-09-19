@@ -15,7 +15,11 @@ class Settings:
         self.upload_dir: Path = Path(os.getenv("UPLOAD_DIR", "./uploads"))
         self.host: str = os.getenv("HOST", "0.0.0.0")
         self.port: int = int(os.getenv("PORT", "8000"))
-        _cors = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://localhost:3000,https://labellens-ai-theta.vercel.app")
+        _cors = os.getenv(
+            "CORS_ORIGINS",
+            "http://localhost:5173,http://localhost:3000,https://labellens-ai-theta.vercel.app"
+        )
+
         self.cors_origins_list: List[str] = [o.strip() for o in _cors.split(",") if o.strip()]
 
 

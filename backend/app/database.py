@@ -44,30 +44,35 @@ def create_tables() -> None:
     from app.models import scan  # noqa: F401 — import registers the model
     Base.metadata.create_all(bind=engine)
 
-    # Lightweight migration helper for SQLite/PostgreSQL during active development
+    # Lightweight migration helper — adds columns that may be missing in pre-existing databases.
+    # Uses dialect-appropriate SQL types so it works on both SQLite and PostgreSQL (Neon).
+    is_pg = "postgresql" in settings.database_url or "postgres" in settings.database_url
+    datetime_type = "TIMESTAMP WITH TIME ZONE" if is_pg else "DATETIME"
+
     try:
         inspector = inspect(engine)
         columns = [c["name"] for c in inspector.get_columns("scans")]
         new_cols = [
-            ("analysis_status", "VARCHAR(20) DEFAULT 'pending'"),
+            ("analysis_status", f"VARCHAR(20) DEFAULT 'pending'"),
             ("raw_ocr_text", "TEXT"),
             ("ocr_results", "JSON"),
             ("extracted_fields", "JSON"),
             ("analysis_error", "TEXT"),
-            ("analyzed_at", "DATETIME"),
-            ("compliance_status", "VARCHAR(30) DEFAULT 'pending'"),
+            ("analyzed_at", datetime_type),
+            ("compliance_status", f"VARCHAR(30) DEFAULT 'pending'"),
             ("overall_assessment", "VARCHAR(50)"),
             ("compliance_summary", "JSON"),
             ("compliance_results", "JSON"),
-            ("validated_at", "DATETIME"),
+            ("validated_at", datetime_type),
             ("inspector_decision", "VARCHAR(50)"),
             ("inspector_notes", "TEXT"),
-            ("inspector_reviewed_at", "DATETIME"),
+            ("inspector_reviewed_at", datetime_type),
         ]
         with engine.begin() as conn:
             for col_name, col_type in new_cols:
                 if col_name not in columns:
                     conn.execute(text(f"ALTER TABLE scans ADD COLUMN {col_name} {col_type}"))
-    except Exception as e:
+    except Exception:
         # If table does not exist yet or inspection fails, create_all already took care of it
         pass
+

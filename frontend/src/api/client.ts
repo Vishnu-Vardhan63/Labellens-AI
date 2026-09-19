@@ -32,7 +32,8 @@ function resolveApiBase(): string {
       return '';
     }
   }
-  // Production fallback for Vercel multi-service deployment
+  // Production fallback: use VITE_API_BASE_URL set in Vercel env vars.
+  // Set VITE_API_BASE_URL=https://labellens-ai.onrender.com in Vercel project settings.
   return 'https://labellens-ai.onrender.com';
 }
 
