@@ -48,10 +48,10 @@ export function Navbar() {
   };
 
   const navLinks = [
-    { to: '/', label: 'Home', icon: HomeIcon, isHash: false },
-    { to: '/#how-it-works', label: 'How It Works', icon: QuestionMarkCircleIcon, isHash: true, hash: 'how-it-works' },
-    { to: '/about', label: 'About', icon: InformationCircleIcon, isHash: false },
-    { to: '/#team', label: 'Team', icon: UserGroupIcon, isHash: true, hash: 'team' },
+    { to: '/', key: 'home', defaultLabel: 'Home', icon: HomeIcon },
+    { to: '/how-it-works', key: 'howItWorks', defaultLabel: 'How It Works', icon: QuestionMarkCircleIcon },
+    { to: '/about', key: 'about', defaultLabel: 'About', icon: InformationCircleIcon },
+    { to: '/team', key: 'team', defaultLabel: 'Team', icon: UserGroupIcon },
   ];
 
   return (
@@ -89,26 +89,25 @@ export function Navbar() {
 
         {/* CENTER: Navigation Links (Desktop) */}
         <nav className="hidden md:flex items-center gap-1.5" aria-label="Primary navigation">
-          {navLinks.map(({ to, label, icon: Icon, isHash, hash }) => {
+          {navLinks.map(({ to, key, defaultLabel, icon: Icon }) => {
             const isActive =
-              !isHash && to === '/'
+              to === '/'
                 ? location.pathname === '/' || location.pathname === '/home'
-                : !isHash && location.pathname.startsWith(to);
+                : location.pathname.startsWith(to);
 
             return (
               <Link
-                key={label}
+                key={key}
                 to={to}
-                onClick={isHash && hash ? (e) => handleScrollToHash(e, hash) : undefined}
                 className={[
-                  'relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all no-underline cursor-pointer',
+                  'relative flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all no-underline cursor-pointer',
                   isActive
                     ? 'text-white bg-[#10263F] border border-[#16324F]'
                     : 'text-[#94A3B8] hover:text-white hover:bg-[#10263F]/60',
                 ].join(' ')}
               >
                 <Icon className={`w-4 h-4 ${isActive ? 'text-[#38BDF8]' : 'text-[#94A3B8]'}`} aria-hidden />
-                <span>{label}</span>
+                <span>{t(`nav.${key}`, defaultLabel)}</span>
                 {isActive && (
                   <span
                     className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-[#38BDF8]"
@@ -129,11 +128,11 @@ export function Navbar() {
               value={i18n.language}
               onChange={handleLanguageChange}
               aria-label="Select Language"
-              className="bg-[#10263F] text-[#F8FAFC] text-xs font-medium pl-7 pr-2.5 py-2 rounded-lg border border-[#16324F] hover:border-[#38BDF8]/40 focus:border-[#38BDF8] focus:outline-none cursor-pointer transition appearance-none"
+              className="bg-[#10263F] text-[#F8FAFC] text-xs font-semibold pl-7 pr-3 py-2 rounded-lg border border-[#16324F] hover:border-[#38BDF8]/40 focus:border-[#38BDF8] focus:outline-none cursor-pointer transition appearance-none"
             >
               {SUPPORTED_LANGUAGES.map((lang) => (
                 <option key={lang.code} value={lang.code} className="bg-[#0B1F3A] text-white py-1">
-                  {lang.flag} {lang.name}
+                  {lang.flag} {lang.nativeName}
                 </option>
               ))}
             </select>
@@ -141,11 +140,15 @@ export function Navbar() {
 
           {/* Secondary CTA: Inspector Workspace */}
           <Link
-            to="/dashboard"
-            className="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-[#F8FAFC] bg-[#10263F] hover:bg-[#16324F] border border-[#16324F] transition cursor-pointer shrink-0"
+            to="/inspector"
+            className={`hidden lg:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold border transition cursor-pointer shrink-0 ${
+              location.pathname === '/inspector' || location.pathname === '/dashboard'
+                ? 'text-white bg-[#2563EB] border-[#2563EB]'
+                : 'text-[#F8FAFC] bg-[#10263F] hover:bg-[#16324F] border-[#16324F]'
+            }`}
           >
             <Squares2X2Icon className="w-4 h-4 text-[#38BDF8]" />
-            <span>Inspector Workspace</span>
+            <span>{t('nav.inspector', 'Inspector Workspace')}</span>
           </Link>
 
           {/* Primary CTA: Scan a Package */}
@@ -154,7 +157,7 @@ export function Navbar() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-extrabold text-white bg-[#2563EB] hover:bg-[#1d4ed8] active:bg-[#1e40af] shadow-md shadow-blue-500/20 transition no-underline cursor-pointer shrink-0"
           >
             <CameraIcon className="w-4 h-4" aria-hidden />
-            <span>SCAN A PACKAGE</span>
+            <span>{t('hero.scanCTA', 'SCAN A PACKAGE')}</span>
           </Link>
 
           {/* Mobile Menu Toggle Button */}
@@ -173,27 +176,24 @@ export function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-[#07111F] border-b border-[#16324F] px-4 py-3 space-y-2 shadow-2xl">
           <nav className="flex flex-col space-y-1">
-            {navLinks.map(({ to, label, icon: Icon, isHash, hash }) => (
+            {navLinks.map(({ to, key, defaultLabel, icon: Icon }) => (
               <Link
-                key={label}
+                key={key}
                 to={to}
-                onClick={(e) => {
-                  if (isHash && hash) handleScrollToHash(e, hash);
-                  else setMobileMenuOpen(false);
-                }}
+                onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-slate-200 hover:bg-[#10263F] transition"
               >
                 <Icon className="w-4 h-4 text-[#38BDF8]" />
-                <span>{label}</span>
+                <span>{t(`nav.${key}`, defaultLabel)}</span>
               </Link>
             ))}
             <Link
-              to="/dashboard"
+              to="/inspector"
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-slate-200 hover:bg-[#10263F] transition"
             >
               <Squares2X2Icon className="w-4 h-4 text-[#38BDF8]" />
-              <span>Inspector Workspace</span>
+              <span>{t('nav.inspector', 'Inspector Workspace')}</span>
             </Link>
           </nav>
         </div>

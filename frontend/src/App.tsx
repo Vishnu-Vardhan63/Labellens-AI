@@ -6,6 +6,8 @@ import { Footer } from './components/layout/Footer';
 import SplashPage from './pages/SplashPage';
 import DashboardPage from './pages/DashboardPage';
 import HomePage from './pages/HomePage';
+import HowItWorksPage from './pages/HowItWorksPage';
+import TeamPage from './pages/TeamPage';
 import ScanPage from './pages/ScanPage';
 import ProcessingPage from './pages/ProcessingPage';
 import StatusPage from './pages/StatusPage';
@@ -25,16 +27,19 @@ export default function App() {
       <div className="flex-1">
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/splash" element={<SplashPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/home" element={<HomePage />} />
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/team" element={<TeamPage />} />
+          <Route path="/inspector" element={<DashboardPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/scan" element={<ScanPage />} />
           <Route path="/processing" element={<ProcessingPage />} />
           <Route path="/status" element={<StatusPage />} />
           <Route path="/results" element={<ResultsPage />} />
           <Route path="/results/:scanId" element={<ResultsPage />} />
           <Route path="/history" element={<HistoryPage />} />
-          <Route path="/about" element={<AboutPage />} />
+          <Route path="/splash" element={<SplashPage />} />
           {/* Catch-all */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
