@@ -12,14 +12,37 @@ from app.config import get_settings
 
 settings = get_settings()
 
-# connect_args is SQLite-specific; remove for PostgreSQL
-_connect_args = {"check_same_thread": False} if "sqlite" in settings.database_url else {}
+def _build_engine():
+    """Build the SQLAlchemy engine with correct dialect-specific options."""
+    url = settings.database_url
 
-engine = create_engine(
-    settings.database_url,
-    connect_args=_connect_args,
-    echo=(settings.environment == "development"),
-)
+    is_pg = "postgresql" in url or "postgres" in url
+
+    if is_pg:
+        # Strip any query parameters that psycopg2 cannot handle (e.g. channel_binding)
+        # and enforce SSL via connect_args instead — more reliable across hosting platforms.
+        base_url = url.split("?")[0]
+
+        connect_args = {
+            "sslmode": "require",
+        }
+        return create_engine(
+            base_url,
+            connect_args=connect_args,
+            pool_pre_ping=True,        # detects stale Neon connections
+            pool_size=2,               # keep small — Neon free tier connection limit
+            max_overflow=3,
+            echo=(settings.environment == "development"),
+        )
+    else:
+        # SQLite (local development)
+        return create_engine(
+            url,
+            connect_args={"check_same_thread": False},
+            echo=(settings.environment == "development"),
+        )
+
+engine = _build_engine()
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
