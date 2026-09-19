@@ -107,6 +107,16 @@ function DeclarationRow({
   };
 
   const isDetected = rule.extracted_value && rule.extracted_value !== 'None';
+  const isVerified = rule.status === 'verified';
+
+  const scrollToEvidence = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onSelect();
+    const el = document.getElementById('visual-evidence-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <div
@@ -124,8 +134,8 @@ function DeclarationRow({
               {rule.display_name}
             </h3>
             {rule.legal_reference && (
-              <span className="text-[11px] text-slate-300 bg-[#16324F] px-2.5 py-0.5 rounded border border-white/10">
-                {rule.legal_reference}
+              <span className="text-[11px] font-mono text-[#38BDF8] bg-[#16324F] px-2.5 py-0.5 rounded border border-[#38BDF8]/30">
+                Rule 6 — {rule.legal_reference}
               </span>
             )}
           </div>
@@ -147,10 +157,76 @@ function DeclarationRow({
       </div>
 
       {isExpanded && (
-        <div className="px-4 pb-4 pt-3 border-t border-white/10 text-xs space-y-3 bg-[#0B1F3A]/90 rounded-b-xl">
+        <div className="px-4 pb-4 pt-3 border-t border-white/10 text-xs space-y-4 bg-[#0B1F3A]/90 rounded-b-xl">
+          {/* Priority 2: WHY WAS THIS FLAGGED / VERIFIED */}
+          <div className="p-4 rounded-xl bg-[#10263F] border border-white/10 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] uppercase font-extrabold text-[#38BDF8] tracking-wider">
+                {isVerified ? 'WHY WAS THIS VERIFIED?' : 'WHY WAS THIS FLAGGED?'}
+              </span>
+              <StatusBadge status={rule.status} />
+            </div>
+
+            <p className="text-xs text-slate-200 leading-relaxed font-normal">
+              {isVerified
+                ? `A valid ${rule.display_name} declaration was detected and matched the configured Legal Metrology validation pattern.`
+                : rule.explanation || `No valid ${rule.display_name} declaration was confidently detected in the available label text.`}
+            </p>
+
+            <div className="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-white/10 text-[11px]">
+              <span className="text-slate-400 font-mono">
+                Requirement: <strong className="text-white">Rule 6 — {rule.legal_reference || 'Statutory Declaration'}</strong>
+              </span>
+              <button
+                type="button"
+                onClick={scrollToEvidence}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-[#2563EB] hover:bg-[#1d4ed8] transition cursor-pointer"
+              >
+                <EyeIcon className="w-3.5 h-3.5" />
+                <span>VIEW VISUAL EVIDENCE</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Priority 1: EXPLAINABLE INSPECTION CHAIN */}
+          <div className="p-4 rounded-xl bg-[#07111F] border border-[#38BDF8]/20 space-y-2.5">
+            <span className="text-[10px] uppercase font-extrabold text-[#38BDF8] tracking-widest block">
+              EXPLAINABLE INSPECTION CHAIN
+            </span>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-[10px] font-mono">
+              <div className="p-2 rounded-lg bg-[#10263F] border border-white/10 text-center">
+                <span className="text-slate-400 block text-[9px]">STEP 01</span>
+                <span className="font-bold text-white">📦 Package Image</span>
+              </div>
+              <div className="p-2 rounded-lg bg-[#10263F] border border-white/10 text-center">
+                <span className="text-slate-400 block text-[9px]">STEP 02</span>
+                <span className="font-bold text-[#38BDF8]">🔤 RapidOCR ONNX</span>
+              </div>
+              <div className="p-2 rounded-lg bg-[#10263F] border border-white/10 text-center">
+                <span className="text-slate-400 block text-[9px]">STEP 03</span>
+                <span className="font-bold text-white">🔍 Extraction</span>
+              </div>
+              <div className="p-2 rounded-lg bg-[#10263F] border border-white/10 text-center">
+                <span className="text-slate-400 block text-[9px]">STEP 04</span>
+                <span className="font-bold text-[#38BDF8]">⚖️ Rule 6 Check</span>
+              </div>
+              <div className="p-2 rounded-lg bg-[#10263F] border border-white/10 text-center">
+                <span className="text-slate-400 block text-[9px]">STEP 05</span>
+                <span className={isVerified ? 'font-bold text-emerald-400' : 'font-bold text-amber-400'}>
+                  {isVerified ? '✓ Verified' : '⚠ Flagged'}
+                </span>
+              </div>
+              <div className="p-2 rounded-lg bg-[#10263F] border border-white/10 text-center">
+                <span className="text-slate-400 block text-[9px]">STEP 06</span>
+                <span className="font-bold text-white">🛡️ Human Review</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Supporting OCR Evidence */}
           <div className="p-3 rounded-xl bg-[#10263F] border border-white/10">
             <span className="text-[10px] uppercase font-bold text-[#38BDF8] tracking-wider block mb-1">
-              Supporting OCR Evidence
+              Supporting Raw OCR Text
             </span>
             {rule.evidence ? (
               <p className="font-mono text-xs text-slate-200 bg-[#07111F] p-2.5 rounded-lg border border-white/10 break-words leading-relaxed">
@@ -159,23 +235,6 @@ function DeclarationRow({
             ) : (
               <p className="text-xs text-slate-500 italic">
                 No matching OCR text segment identified on this package panel.
-              </p>
-            )}
-          </div>
-
-          <div className="p-3 rounded-xl bg-[#10263F] border border-white/10">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[10px] uppercase font-bold text-[#38BDF8] tracking-wider">
-                Automated Assessment & Rationale
-              </span>
-              <StatusBadge status={rule.status} />
-            </div>
-            <p className="text-xs text-slate-300 leading-relaxed mt-1">
-              {rule.explanation}
-            </p>
-            {rule.recommendation && (
-              <p className="text-[11px] text-amber-300 bg-amber-500/10 p-2 rounded-lg border border-amber-500/20 mt-2 font-medium">
-                Recommendation: {rule.recommendation}
               </p>
             )}
           </div>
@@ -857,6 +916,38 @@ export default function ResultsPage() {
               </div>
             </div>
           )}
+
+          {/* Priority 3: System Evaluation & Prototype Methodology */}
+          <div className="bg-[#0B1F3A]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl">
+            <div className="flex items-center justify-between pb-3.5 border-b border-white/10 mb-4">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">📊</span>
+                <h3 className="text-sm font-extrabold text-white">System Evaluation & Verification Methodology</h3>
+              </div>
+              <span className="text-[11px] font-bold text-[#38BDF8] bg-[#16324F] px-2.5 py-1 rounded-lg border border-[#38BDF8]/30">
+                Prototype Validation
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-mono">
+              <div className="p-3.5 rounded-xl bg-[#10263F] border border-white/10">
+                <span className="text-slate-400 block text-[10px] uppercase font-bold mb-1">Methodology</span>
+                <span className="font-bold text-white">Deterministic Rule-Based Ingestion & 4-Point Box Grounding</span>
+              </div>
+              <div className="p-3.5 rounded-xl bg-[#10263F] border border-white/10">
+                <span className="text-slate-400 block text-[10px] uppercase font-bold mb-1">Evaluation Status</span>
+                <span className="font-bold text-[#38BDF8]">Prototype Verification (Rule 6 Compliance)</span>
+              </div>
+              <div className="p-3.5 rounded-xl bg-[#10263F] border border-white/10">
+                <span className="text-slate-400 block text-[10px] uppercase font-bold mb-1">Known Limitations</span>
+                <span className="font-bold text-amber-300">Blurry text or panel glare requires officer review</span>
+              </div>
+              <div className="p-3.5 rounded-xl bg-[#10263F] border border-white/10">
+                <span className="text-slate-400 block text-[10px] uppercase font-bold mb-1">Human-in-the-Loop</span>
+                <span className="font-bold text-[#22C55E]">100% Traceable Evidence Safeguard</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
