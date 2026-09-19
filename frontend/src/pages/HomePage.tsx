@@ -25,30 +25,30 @@ import {
 const WORKFLOW_STEPS = [
   {
     number: '01',
-    label: 'SCAN THE PACKAGE',
-    title: 'Scan the Package',
-    description: 'Capture package panels using a live camera or upload images.',
+    label: 'UPLOAD',
+    title: 'Upload Package Label',
+    description: 'Upload or capture a clear photo of the product package panel.',
     icon: CameraIcon,
   },
   {
     number: '02',
-    label: 'EXTRACT INFORMATION',
-    title: 'Extract Information',
-    description: 'AI-assisted OCR reads visible package information.',
+    label: 'EXTRACT',
+    title: 'Extract Declarations',
+    description: 'AI-assisted OCR detects text and maps exact 4-point bounding boxes.',
     icon: DocumentTextIcon,
   },
   {
     number: '03',
-    label: 'ANALYZE DECLARATIONS',
-    title: 'Analyze Declarations',
-    description: 'The system organizes information and checks available declarations.',
+    label: 'VALIDATE',
+    title: 'Rule 6 Compliance',
+    description: 'Automated screening against Legal Metrology Packaged Commodities Rules.',
     icon: MagnifyingGlassIcon,
   },
   {
     number: '04',
-    label: 'REVIEW RESULTS',
-    title: 'Review Results',
-    description: 'View extracted information, potential issues, and supporting evidence.',
+    label: 'VERIFY',
+    title: 'Visual Evidence',
+    description: 'Every finding is traceable to visual evidence on the package label.',
     icon: ClipboardDocumentCheckIcon,
   },
 ];
@@ -87,32 +87,43 @@ export default function HomePage() {
           <div className="lg:col-span-6 space-y-6 text-left">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#2563EB]/20 text-[#38BDF8] border border-[#38BDF8]/30 shadow-xs">
               <span className="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse" />
-              {t('hero.badge', 'Real-Time Regulatory Intelligence')}
+              <span>AI-Assisted Package Intelligence</span>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-[#F8FAFC] leading-[1.15]">
-              {t('hero.title', 'Autonomous Verification & Compliance Platform')}
-            </h1>
+            <div className="space-y-2">
+              <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-[#F8FAFC] leading-[1.1]">
+                LABEL LENS AI
+              </h1>
+              <p className="text-xl sm:text-2xl font-bold text-[#38BDF8] tracking-tight">
+                AI-Assisted Packaged Commodity Compliance Screening
+              </p>
+            </div>
 
             <p className="text-base sm:text-lg text-[#94A3B8] max-w-xl leading-relaxed font-normal">
-              {t('hero.subtitle', 'AI-powered statutory declaration verification for Legal Metrology Officers, Compliance Auditors, and Conscious Consumers under Packaged Commodities Rules, 2011.')}
+              Upload a product label. Extract declarations, screen them against applicable requirements, and see the evidence behind every finding.
             </p>
+
+            {/* Differentiator Callout */}
+            <div className="p-3.5 rounded-xl bg-[#10263F] border border-[#38BDF8]/30 flex items-center gap-3 text-xs sm:text-sm font-semibold text-[#F8FAFC]">
+              <EyeIcon className="w-5 h-5 text-[#38BDF8] shrink-0" />
+              <span>Every finding is traceable to visual evidence on the package label.</span>
+            </div>
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
               <button
                 onClick={() => navigate('/scan')}
-                className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-sm font-bold text-white bg-[#2563EB] hover:bg-[#1d4ed8] active:bg-[#1e40af] shadow-lg shadow-blue-500/25 transition-all transform hover:-translate-y-0.5 cursor-pointer tracking-wider"
+                className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-sm font-extrabold text-white bg-[#2563EB] hover:bg-[#1d4ed8] active:bg-[#1e40af] shadow-lg shadow-blue-500/25 transition-all transform hover:-translate-y-0.5 cursor-pointer tracking-wider"
               >
                 <CameraIcon className="w-5 h-5" aria-hidden />
-                <span>🔵 {t('hero.scanCTA', 'SCAN A PACKAGE')}</span>
+                <span>START INSPECTION</span>
               </button>
 
               <button
-                onClick={() => navigate('/dashboard')}
+                onClick={handleScrollToHowItWorks}
                 className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-sm font-semibold text-[#F8FAFC] bg-[#10263F] hover:bg-[#16324F] border border-[#16324F] transition cursor-pointer"
               >
-                <span>{t('hero.inspectorCTA', 'INSPECTOR WORKSPACE')} →</span>
+                <span>HOW IT WORKS ↓</span>
               </button>
             </div>
           </div>
@@ -126,10 +137,10 @@ export default function HomePage() {
               <div className="flex items-center justify-between pb-4 border-b border-[#16324F] mb-6">
                 <div className="flex items-center gap-2">
                   <span className="w-3 h-3 rounded-full bg-[#22C55E]" />
-                  <span className="text-xs font-bold tracking-wider text-slate-300 uppercase">LabelLens AI SCANNER</span>
+                  <span className="text-xs font-bold tracking-wider text-slate-300 uppercase">LabelLens AI SCREENER</span>
                 </div>
-                <span className="text-[11px] font-mono text-[#38BDF8] bg-[#2563EB]/20 px-2 py-0.5 rounded border border-[#38BDF8]/30">
-                  98.4% Accuracy
+                <span className="text-[11px] font-mono text-[#38BDF8] bg-[#2563EB]/20 px-2.5 py-1 rounded-lg border border-[#38BDF8]/30 font-semibold">
+                  Visual Evidence Engine
                 </span>
               </div>
 
@@ -139,11 +150,11 @@ export default function HomePage() {
                   <div className="flex items-center gap-3">
                     <span className="w-9 h-9 rounded-xl bg-[#2563EB]/20 text-[#38BDF8] flex items-center justify-center text-lg">📦</span>
                     <div>
-                      <p className="text-xs font-bold text-white">PACKAGE SILHOUETTE</p>
-                      <p className="text-[11px] text-[#94A3B8]">Physical Product Ingestion</p>
+                      <p className="text-xs font-bold text-white">PACKAGE INGESTION</p>
+                      <p className="text-[11px] text-[#94A3B8]">Packaged Commodity Image</p>
                     </div>
                   </div>
-                  <span className="text-xs font-mono text-[#22C55E]">Validated</span>
+                  <span className="text-xs font-mono text-[#22C55E]">Loaded</span>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-[#07111F] border border-[#16324F] flex items-center justify-between">
@@ -152,11 +163,11 @@ export default function HomePage() {
                       <CameraIcon className="w-5 h-5 text-[#38BDF8]" />
                     </span>
                     <div>
-                      <p className="text-xs font-bold text-white">SCANNING FRAME</p>
-                      <p className="text-[11px] text-[#94A3B8]">Multi-Panel Live Camera</p>
+                      <p className="text-xs font-bold text-white">OCR TEXT DETECTION</p>
+                      <p className="text-[11px] text-[#94A3B8]">RapidOCR ONNX Engine</p>
                     </div>
                   </div>
-                  <span className="text-xs font-mono text-[#38BDF8]">Live Frame</span>
+                  <span className="text-xs font-mono text-[#38BDF8]">4-Point Box</span>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-[#07111F] border border-[#16324F] flex items-center justify-between">
@@ -165,11 +176,11 @@ export default function HomePage() {
                       <MagnifyingGlassIcon className="w-5 h-5 text-[#38BDF8]" />
                     </span>
                     <div>
-                      <p className="text-xs font-bold text-white">AI ANALYSIS</p>
-                      <p className="text-[11px] text-[#94A3B8]">OCR Text Bounding Box Highlights</p>
+                      <p className="text-xs font-bold text-white">RULE 6 SCREENING</p>
+                      <p className="text-[11px] text-[#94A3B8]">Statutory Field Extraction</p>
                     </div>
                   </div>
-                  <span className="text-xs font-mono text-slate-300">ONNX Engine</span>
+                  <span className="text-xs font-mono text-slate-300">Automated</span>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-[#2563EB]/20 border border-[#38BDF8]/30 flex items-center justify-between">
@@ -178,12 +189,12 @@ export default function HomePage() {
                       <ClipboardDocumentCheckIcon className="w-5 h-5" />
                     </span>
                     <div>
-                      <p className="text-xs font-extrabold text-white">VERIFIED DATA</p>
-                      <p className="text-[11px] text-slate-300">Rule 6 Statutory Audit Record</p>
+                      <p className="text-xs font-extrabold text-white">EVIDENCE MAP</p>
+                      <p className="text-[11px] text-slate-300">Traceable Bounding Boxes</p>
                     </div>
                   </div>
-                  <span className="text-xs font-bold text-[#22C55E] bg-[#22C55E]/20 px-2 py-0.5 rounded border border-[#22C55E]/30">
-                    Rule 6 Ready
+                  <span className="text-xs font-bold text-[#22C55E] bg-[#22C55E]/20 px-2.5 py-1 rounded-lg border border-[#22C55E]/30">
+                    Inspector Ready
                   </span>
                 </div>
               </div>

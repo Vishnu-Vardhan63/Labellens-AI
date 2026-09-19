@@ -276,7 +276,7 @@ export default function ScanPage() {
                     </p>
 
                     <div className="flex items-center gap-3 text-[11px] text-slate-400 font-mono">
-                      <span>JPG • PNG • WEBP</span>
+                      <span>JPEG • PNG • WEBP • HEIC</span>
                       <span>•</span>
                       <span>Max 10 MB</span>
                     </div>

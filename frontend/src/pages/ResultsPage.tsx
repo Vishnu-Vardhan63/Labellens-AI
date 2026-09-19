@@ -556,9 +556,9 @@ export default function ResultsPage() {
         {/* Page Header */}
         <header className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-[#2563EB]/15 text-[#38BDF8] border border-[#2563EB]/30 mb-3">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#2563EB]/20 text-[#38BDF8] border border-[#38BDF8]/30 mb-3 uppercase tracking-wider">
               <ShieldCheckIcon className="w-4 h-4 text-[#38BDF8]" />
-              {t('results.header', 'Package Verification Findings')}
+              <span>INSPECTION ASSESSMENT</span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
               {productName}
@@ -578,7 +578,7 @@ export default function ResultsPage() {
                 }`}
               >
                 <UserIcon className="w-3.5 h-3.5" />
-                <span>{t('results.simpleView', 'Consumer View')}</span>
+                <span>Consumer View</span>
               </button>
               <button
                 type="button"
@@ -590,7 +590,7 @@ export default function ResultsPage() {
                 }`}
               >
                 <ShieldCheckIcon className="w-3.5 h-3.5" />
-                <span>{t('results.inspectorView', 'Inspector View')}</span>
+                <span>Inspector View</span>
               </button>
             </div>
 
@@ -600,19 +600,21 @@ export default function ResultsPage() {
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-[#2563EB] hover:bg-[#1d4ed8] transition cursor-pointer shadow-lg shadow-blue-500/25"
             >
               <ArrowDownTrayIcon className="w-4 h-4" />
-              <span>{isDownloadingReport ? t('common.generatingPdf', 'Generating Report...') : t('common.downloadPdf', 'Download Official PDF Report')}</span>
+              <span>{isDownloadingReport ? 'Generating Report...' : 'Download Official PDF Report'}</span>
             </button>
           </div>
         </header>
 
-        {/* OCR Evidence Preservation Notice */}
-        <div className="mb-6 p-3.5 rounded-xl bg-[#0B1F3A]/90 border border-blue-500/20 text-slate-300 text-xs flex items-center gap-2.5 shadow-sm">
-          <GlobeAltIcon className="w-4 h-4 text-[#38BDF8] shrink-0" />
-          <span>
-            {t(
-              'results.ocrNotice',
-              'Original OCR evidence is displayed exactly as printed on package. UI interpretation translated for convenience.'
-            )}
+        {/* Human-in-the-Loop & Evidence Disclaimer Banner */}
+        <div className="mb-6 p-4 rounded-xl bg-[#10263F]/90 border border-[#38BDF8]/30 text-slate-300 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
+          <div className="flex items-center gap-2.5">
+            <GlobeAltIcon className="w-5 h-5 text-[#38BDF8] shrink-0" />
+            <span className="font-medium text-slate-200">
+              Automated screening identifies potential issues. Final determination remains with an authorized reviewer.
+            </span>
+          </div>
+          <span className="text-[11px] font-semibold text-[#38BDF8] bg-[#2563EB]/20 px-2.5 py-1 rounded-lg border border-[#38BDF8]/30 shrink-0">
+            Every finding is traceable to visual evidence
           </span>
         </div>
 
