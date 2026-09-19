@@ -76,125 +76,91 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#07111F] text-[#F8FAFC] font-sans selection:bg-[#2563EB] selection:text-white">
       {/* ------------------------------------------------------------- */}
-      {/* SECTION 1 — HERO (100VH)                                       */}
+      {/* SECTION 1 — HERO                                               */}
       {/* ------------------------------------------------------------- */}
-      <section className="relative min-h-[calc(100vh-4rem)] flex items-center bg-gradient-to-b from-[#07111F] via-[#07111F] to-[#0B1F3A] border-b border-[#16324F] px-4 sm:px-6 lg:px-12 py-16 overflow-hidden">
-        {/* Subtle Background Mesh Graphics */}
-        <div className="absolute inset-0 bg-[radial-gradient(#38BDF8_1px,transparent_1px)] [background-size:32px_32px] opacity-10 pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
+      <section className="relative flex items-center bg-[#07111F] border-b border-[#16324F] px-4 sm:px-6 lg:px-12 py-12 sm:py-16">
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* Left Side */}
-          <div className="lg:col-span-6 space-y-6 text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#2563EB]/20 text-[#38BDF8] border border-[#38BDF8]/30 shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse" />
-              <span>AI-Assisted Package Intelligence</span>
+          <div className="lg:col-span-7 space-y-5 text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-semibold bg-[#10263F] text-[#38BDF8] border border-[#16324F]">
+              <span className="w-2 h-2 rounded-full bg-[#38BDF8]" />
+              <span>Legal Metrology Compliance Screening</span>
             </div>
 
-            <div className="space-y-2">
-              <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-[#F8FAFC] leading-[1.1]">
+            <div className="space-y-1.5">
+              <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
                 LABEL LENS AI
               </h1>
-              <p className="text-xl sm:text-2xl font-bold text-[#38BDF8] tracking-tight">
-                AI-Assisted Packaged Commodity Compliance Screening
+              <p className="text-lg sm:text-xl font-bold text-[#38BDF8] tracking-tight">
+                AI-Assisted Packaged Commodity Inspection
               </p>
             </div>
 
-            <p className="text-base sm:text-lg text-[#94A3B8] max-w-xl leading-relaxed font-normal">
-              Upload a product label. Extract declarations, screen them against applicable requirements, and see the evidence behind every finding.
+            <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed font-normal">
+              Screen packaged commodity labels against mandatory Rule 6 declarations and trace each finding back to visual evidence.
             </p>
 
-            {/* Differentiator Callout */}
-            <div className="p-3.5 rounded-xl bg-[#10263F] border border-[#38BDF8]/30 flex items-center gap-3 text-xs sm:text-sm font-semibold text-[#F8FAFC]">
-              <EyeIcon className="w-5 h-5 text-[#38BDF8] shrink-0" />
-              <span>Every finding is traceable to visual evidence on the package label.</span>
-            </div>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+            {/* Practical CTA Actions */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
               <button
                 onClick={() => navigate('/scan')}
-                className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-sm font-extrabold text-white bg-[#2563EB] hover:bg-[#1d4ed8] active:bg-[#1e40af] shadow-lg shadow-blue-500/25 transition-all transform hover:-translate-y-0.5 cursor-pointer tracking-wider"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-xs font-extrabold text-white bg-[#2563EB] hover:bg-[#1d4ed8] active:bg-[#1e40af] transition cursor-pointer tracking-wider"
               >
-                <CameraIcon className="w-5 h-5" aria-hidden />
-                <span>START INSPECTION</span>
+                <CameraIcon className="w-4 h-4" aria-hidden />
+                <span>SCAN A PACKAGE</span>
               </button>
 
               <button
                 onClick={handleScrollToHowItWorks}
-                className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-sm font-semibold text-[#F8FAFC] bg-[#10263F] hover:bg-[#16324F] border border-[#16324F] transition cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-5 py-3 rounded-lg text-xs font-semibold text-slate-200 bg-[#10263F] hover:bg-[#16324F] border border-[#16324F] transition cursor-pointer"
               >
                 <span>HOW IT WORKS ↓</span>
               </button>
             </div>
           </div>
 
-          {/* Right Side Visual Composition */}
-          <div className="lg:col-span-6 flex justify-center">
-            <div className="w-full max-w-lg bg-[#10263F] border border-[#16324F] rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden backdrop-blur-md">
-              {/* Animated Laser Scan Line */}
-              <div className="absolute inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#38BDF8] to-transparent shadow-[0_0_15px_#38BDF8] top-12 animate-[bounce_3s_infinite]" />
-
-              <div className="flex items-center justify-between pb-4 border-b border-[#16324F] mb-6">
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-[#22C55E]" />
-                  <span className="text-xs font-bold tracking-wider text-slate-300 uppercase">LabelLens AI SCREENER</span>
-                </div>
-                <span className="text-[11px] font-mono text-[#38BDF8] bg-[#2563EB]/20 px-2.5 py-1 rounded-lg border border-[#38BDF8]/30 font-semibold">
-                  Visual Evidence Engine
+          {/* Right Side — Functional Inspection Overview */}
+          <div className="lg:col-span-5 flex justify-center">
+            <div className="w-full max-w-md bg-[#0B1F3A] border border-[#16324F] rounded-lg p-5 shadow-sm space-y-3.5">
+              <div className="flex items-center justify-between pb-3 border-b border-[#16324F]">
+                <span className="text-xs font-bold text-slate-200 uppercase tracking-wider">Inspection Engine Overview</span>
+                <span className="text-[11px] font-mono text-[#38BDF8] bg-[#10263F] px-2 py-0.5 rounded border border-[#16324F]">
+                  Rule 6 Audit
                 </span>
               </div>
 
-              {/* Composition Steps */}
-              <div className="space-y-4">
-                <div className="p-4 rounded-2xl bg-[#07111F] border border-[#16324F] flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="w-9 h-9 rounded-xl bg-[#2563EB]/20 text-[#38BDF8] flex items-center justify-center text-lg">📦</span>
-                    <div>
-                      <p className="text-xs font-bold text-white">PACKAGE INGESTION</p>
-                      <p className="text-[11px] text-[#94A3B8]">Packaged Commodity Image</p>
-                    </div>
+              <div className="space-y-2.5 text-xs">
+                <div className="p-3 rounded-md bg-[#10263F] border border-[#16324F] flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-white">01. Image Ingestion</p>
+                    <p className="text-[11px] text-slate-400">Front / Side package panels</p>
                   </div>
-                  <span className="text-xs font-mono text-[#22C55E]">Loaded</span>
+                  <span className="text-[11px] font-mono text-emerald-400">Loaded</span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-[#07111F] border border-[#16324F] flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="w-9 h-9 rounded-xl bg-[#2563EB]/20 text-[#38BDF8] flex items-center justify-center">
-                      <CameraIcon className="w-5 h-5 text-[#38BDF8]" />
-                    </span>
-                    <div>
-                      <p className="text-xs font-bold text-white">OCR TEXT DETECTION</p>
-                      <p className="text-[11px] text-[#94A3B8]">RapidOCR ONNX Engine</p>
-                    </div>
+                <div className="p-3 rounded-md bg-[#10263F] border border-[#16324F] flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-white">02. RapidOCR ONNX Engine</p>
+                    <p className="text-[11px] text-slate-400">4-Point Bounding Box Map</p>
                   </div>
-                  <span className="text-xs font-mono text-[#38BDF8]">4-Point Box</span>
+                  <span className="text-[11px] font-mono text-[#38BDF8]">Grounded</span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-[#07111F] border border-[#16324F] flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="w-9 h-9 rounded-xl bg-[#2563EB]/20 text-[#38BDF8] flex items-center justify-center">
-                      <MagnifyingGlassIcon className="w-5 h-5 text-[#38BDF8]" />
-                    </span>
-                    <div>
-                      <p className="text-xs font-bold text-white">RULE 6 SCREENING</p>
-                      <p className="text-[11px] text-[#94A3B8]">Statutory Field Extraction</p>
-                    </div>
+                <div className="p-3 rounded-md bg-[#10263F] border border-[#16324F] flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-white">03. Statutory Declaration Check</p>
+                    <p className="text-[11px] text-slate-400">MRP, Net Qty, Mfg Date, Packer</p>
                   </div>
-                  <span className="text-xs font-mono text-slate-300">Automated</span>
+                  <span className="text-[11px] font-mono text-slate-300">Automated</span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-[#2563EB]/20 border border-[#38BDF8]/30 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="w-9 h-9 rounded-xl bg-[#2563EB] text-white flex items-center justify-center">
-                      <ClipboardDocumentCheckIcon className="w-5 h-5" />
-                    </span>
-                    <div>
-                      <p className="text-xs font-extrabold text-white">EVIDENCE MAP</p>
-                      <p className="text-[11px] text-slate-300">Traceable Bounding Boxes</p>
-                    </div>
+                <div className="p-3 rounded-md bg-[#10263F] border border-[#16324F] flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-white">04. Visual Evidence & Review</p>
+                    <p className="text-[11px] text-slate-400">Traceable audit record</p>
                   </div>
-                  <span className="text-xs font-bold text-[#22C55E] bg-[#22C55E]/20 px-2.5 py-1 rounded-lg border border-[#22C55E]/30">
-                    Inspector Ready
+                  <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                    Ready
                   </span>
                 </div>
               </div>
@@ -204,163 +170,43 @@ export default function HomePage() {
       </section>
 
       {/* ------------------------------------------------------------- */}
-      {/* SECTION 2 — THE PURPOSE (EDITORIAL & MINIMAL)                 */}
+      {/* SECTION 2 — CONCISE HORIZONTAL WORKFLOW PROCESS               */}
       {/* ------------------------------------------------------------- */}
-      <section className="py-24 bg-[#07111F] border-b border-[#16324F] px-4 sm:px-6 lg:px-12 text-center">
-        <div className="max-w-4xl mx-auto space-y-6">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-[#38BDF8]">
-            OUR PURPOSE
-          </span>
-          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#F8FAFC] leading-tight">
-            From Package Labels to Clear Insights.
-          </h2>
-          <p className="text-base sm:text-xl text-[#94A3B8] font-normal leading-relaxed max-w-2xl mx-auto">
-            LABEL LENS AI transforms visible package information into structured, reviewable insights for consumers and inspection workflows.
-          </p>
-        </div>
-      </section>
-
-      {/* ------------------------------------------------------------- */}
-      {/* SECTION 3 — TWO PERSPECTIVES                                  */}
-      {/* ------------------------------------------------------------- */}
-      <section className="py-24 bg-[#0B1F3A] border-b border-[#16324F] px-4 sm:px-6 lg:px-12">
-        <div className="max-w-7xl mx-auto space-y-16">
-          <div className="text-center max-w-3xl mx-auto">
-            <span className="text-xs font-extrabold uppercase tracking-widest text-[#38BDF8] bg-[#2563EB]/20 px-3 py-1 rounded-full border border-[#38BDF8]/30">
-              DUAL WORKFLOW PLATFORM
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#F8FAFC] mt-3">
-              One Platform. Two Perspectives.
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-            {/* LEFT — CONSUMERS */}
-            <div className="bg-[#10263F] border border-[#16324F] rounded-3xl p-8 sm:p-10 shadow-lg flex flex-col justify-between hover:border-[#38BDF8]/40 transition-all">
-              <div>
-                <div className="w-12 h-12 rounded-2xl bg-[#2563EB]/20 text-[#38BDF8] flex items-center justify-center mb-6">
-                  <UserIcon className="w-6 h-6" />
-                </div>
-                <span className="text-xs font-extrabold uppercase tracking-wider text-[#38BDF8]">
-                  PUBLIC CONSUMER TRANSPARENCY
-                </span>
-                <h3 className="text-2xl font-bold text-white mt-1 mb-3">
-                  For Consumers
-                </h3>
-                <p className="text-sm text-[#94A3B8] leading-relaxed mb-8">
-                  Understand the information displayed on packaged products.
-                </p>
-
-                <ul className="space-y-4 text-sm font-semibold text-[#F8FAFC] mb-10">
-                  <li className="flex items-center gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-[#38BDF8] flex-shrink-0" />
-                    <span>Product Information</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-[#38BDF8] flex-shrink-0" />
-                    <span>Ingredients & Nutrition</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-[#38BDF8] flex-shrink-0" />
-                    <span>Visible Package Details</span>
-                  </li>
-                </ul>
-              </div>
-
-              <button
-                onClick={() => navigate('/scan')}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-sm font-bold text-white bg-[#2563EB] hover:bg-[#1d4ed8] transition cursor-pointer shadow-sm"
-              >
-                <span>EXPLORE PACKAGE INFORMATION →</span>
-              </button>
+      <section id="how-it-works" className="py-12 bg-[#07111F] text-white px-4 sm:px-6 lg:px-12 border-b border-[#16324F]">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-[#38BDF8]">
+                INSPECTION PROCESS
+              </span>
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white mt-0.5">
+                4-Step Compliance Screening Workflow
+              </h2>
             </div>
-
-            {/* RIGHT — INSPECTORS */}
-            <div className="bg-[#16324F] border border-white/10 rounded-3xl p-8 sm:p-10 shadow-xl flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-2xl bg-[#2563EB]/30 text-white flex items-center justify-center mb-6 border border-white/20">
-                  <BriefcaseIcon className="w-6 h-6" />
-                </div>
-                <span className="text-xs font-extrabold uppercase tracking-wider text-[#22C55E]">
-                  STATUTORY ENFORCEMENT WORKSPACE
-                </span>
-                <h3 className="text-2xl font-bold text-white mt-1 mb-3">
-                  For Inspectors
-                </h3>
-                <p className="text-sm text-slate-300 leading-relaxed mb-8">
-                  Evidence-based package review tools.
-                </p>
-
-                <ul className="space-y-4 text-sm font-semibold text-white mb-10">
-                  <li className="flex items-center gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-[#22C55E] flex-shrink-0" />
-                    <span>Mandatory Declarations</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-[#22C55E] flex-shrink-0" />
-                    <span>Potential Conflicts</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-[#22C55E] flex-shrink-0" />
-                    <span>Inspection Evidence</span>
-                  </li>
-                </ul>
-              </div>
-
-              <button
-                onClick={() => navigate('/dashboard')}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-sm font-bold text-[#07111F] bg-white hover:bg-slate-100 transition cursor-pointer shadow-sm"
-              >
-                <span>OPEN INSPECTOR WORKSPACE →</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="text-center">
-            <p className="text-xs sm:text-sm font-medium text-[#94A3B8]">
-              ℹ️ AI-assisted analysis supports review. Final regulatory decisions remain with authorized authorities.
+            <p className="text-xs text-slate-400 max-w-sm">
+              Standardized inspection flow from package capture to official review.
             </p>
           </div>
-        </div>
-      </section>
 
-      {/* ------------------------------------------------------------- */}
-      {/* SECTION 4 — HOW IT WORKS                                      */}
-      {/* ------------------------------------------------------------- */}
-      <section id="how-it-works" className="py-24 bg-[#07111F] text-white px-4 sm:px-6 lg:px-12 border-b border-[#16324F] scroll-mt-16">
-        <div className="max-w-7xl mx-auto space-y-16">
-          <div className="text-center max-w-3xl mx-auto">
-            <span className="text-xs font-extrabold uppercase tracking-widest text-[#38BDF8]">
-              AUTOMATED WORKFLOW
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#F8FAFC] mt-2">
-              How It Works
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {WORKFLOW_STEPS.map((step) => {
               const Icon = step.icon;
               return (
                 <div
                   key={step.number}
-                  className="bg-[#10263F] border border-[#16324F] rounded-3xl p-6 sm:p-8 flex flex-col justify-between hover:bg-[#16324F] transition-all group"
+                  className="bg-[#0B1F3A] border border-[#16324F] rounded-lg p-4 flex flex-col justify-between"
                 >
-                  <div>
-                    <div className="flex items-center justify-between mb-6">
-                      <span className="text-4xl font-black text-[#38BDF8]">
-                        {step.number}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-mono font-bold text-[#38BDF8] bg-[#10263F] px-2 py-0.5 rounded border border-[#16324F]">
+                        {step.label}
                       </span>
-                      <Icon className="w-6 h-6 text-[#94A3B8] group-hover:text-white transition-colors" />
+                      <Icon className="w-4 h-4 text-slate-400" />
                     </div>
-
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#38BDF8] block mb-1">
-                      {step.label}
-                    </span>
-                    <h3 className="text-lg font-bold text-white mb-2">
+                    <h3 className="text-xs font-bold text-white">
                       {step.title}
                     </h3>
-                    <p className="text-xs text-[#94A3B8] leading-relaxed">
+                    <p className="text-[11px] text-slate-400 leading-relaxed">
                       {step.description}
                     </p>
                   </div>
