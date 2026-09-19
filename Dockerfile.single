@@ -1,0 +1,45 @@
+# LABEL LENS AI — Single-Service Production Dockerfile (Combined Frontend + Backend)
+# Stage 1: Build Vite Frontend
+FROM node:20-alpine AS frontend-builder
+WORKDIR /app/frontend
+COPY frontend/package*.json ./
+RUN npm install
+COPY frontend/ ./
+RUN npm run build
+
+# Stage 2: Python FastAPI Runtime
+FROM python:3.11-slim
+WORKDIR /app
+
+# Install system C++ dependencies required by OpenCV & RapidOCR ONNXRuntime
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1 \
+    libglib2.0-0 \
+    libgomp1 \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy Python dependencies & install
+COPY backend/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy FastAPI backend code
+COPY backend/ ./
+
+# Copy compiled frontend dist from Stage 1 into /app/static
+COPY --from=frontend-builder /app/frontend/dist ./static
+
+# Set environment variables
+ENV HOST=0.0.0.0
+ENV PORT=8000
+ENV ENVIRONMENT=production
+ENV PYTHONPATH=/app
+
+EXPOSE 8000
+
+# Health check endpoint
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD curl -f http://127.0.0.1:${PORT:-8000}/health || exit 1
+
+# Start Uvicorn single worker for 512MB RAM compliance
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1"]

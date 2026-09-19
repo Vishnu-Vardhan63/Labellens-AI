@@ -22,12 +22,17 @@ function resolveApiBase(): string {
     return 'http://10.0.2.2:8000';
   }
   if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname;
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    const { hostname, port } = window.location;
+    // Vite dev server on port 5173 -> point to FastAPI backend on port 8000
+    if ((hostname === 'localhost' || hostname === '127.0.0.1') && port === '5173') {
       return 'http://127.0.0.1:8000';
     }
+    // Single-service deployment (same origin serves API and frontend)
+    if (port === '8000' || hostname.includes('onrender.com')) {
+      return '';
+    }
   }
-  // Production fallback to live FastAPI backend on Render
+  // Production fallback for Vercel multi-service deployment
   return 'https://labellens-ai.onrender.com';
 }
 
