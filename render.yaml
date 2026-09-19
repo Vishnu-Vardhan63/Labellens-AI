@@ -10,7 +10,6 @@ services:
         value: production
       - key: CORS_ORIGINS
         value: https://labellens-ai-theta.vercel.app,http://localhost:5173
-      - key: UPLOAD_DIR
-        value: ./uploads
-      - key: DATABASE_URL
-        value: sqlite:///./label_lens.db
+      # DATABASE_URL and UPLOAD_DIR must be set manually in Render dashboard env vars
+      # DATABASE_URL=postgresql://... (Neon connection string — do NOT commit credentials)
+      # UPLOAD_DIR=/tmp/uploads
